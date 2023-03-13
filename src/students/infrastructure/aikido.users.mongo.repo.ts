@@ -6,7 +6,7 @@ import { HTTPError } from '../../errors/http.error';
 
 const debug = createDebug('AiJo:AiUsMongoRepo');
 
-export default class AikidoUserMongoRepository implements AikidoUserRepo {
+export default class AikidoUserMongoRepo implements AikidoUserRepo {
   constructor() {
     debug('Aikido User Repo instantiated...');
   }

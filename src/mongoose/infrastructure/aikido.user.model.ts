@@ -1,6 +1,5 @@
 import { model, Schema } from 'mongoose';
 import AikidoUser from '../../students/domain/aikido.user';
-import Tech from '../../techniques/domain/techniques';
 
 const aikidoUserSchema = new Schema<AikidoUser>({
   email: {
@@ -20,14 +19,20 @@ const aikidoUserSchema = new Schema<AikidoUser>({
     type: String,
     required: true,
   },
+  grade: {
+    type: String,
+    required: true,
+  },
   techsLearnt: [
     {
-      type: Tech,
+      type: Schema.Types.ObjectId,
+      ref: 'Tech',
     },
   ],
   techsInProgress: [
     {
-      type: Tech,
+      type: Schema.Types.ObjectId,
+      ref: 'Tech',
     },
   ],
   role: {
@@ -37,10 +42,12 @@ const aikidoUserSchema = new Schema<AikidoUser>({
     type: String,
   },
   principalSensei: {
-    type: AikidoUser,
+    type: Schema.Types.ObjectId,
+    ref: 'Aikido_User',
   },
   mainUke: {
-    type: AikidoUser,
+    type: Schema.Types.ObjectId,
+    ref: 'Aikido_User',
   },
   avatar: {
     type: String,

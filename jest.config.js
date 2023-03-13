@@ -12,7 +12,7 @@ export default {
     'routers',
     'config.ts',
     'mocks',
-    'src/repository/*.*.model.*',
+    '**/*.model.*',
     'helpers',
   ],
 };

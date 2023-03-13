@@ -1,0 +1,31 @@
+{
+  "autorun": true,
+  "terminals": [
+    {
+      "name": "Build",
+      "open": true,
+      "execute": true,
+      "description": "TSCompiler",
+      "substitution": false,
+      "icon": "unfold",
+      "color": "terminal.ansiCyan",
+      "command": "npm run build"
+    },
+    {
+      "name": "Serv:mon",
+      "execute": true,
+      "description": "ServerNodemon",
+      "icon": "server-environment",
+      "color": "terminal.ansiYellow",
+      "commands": "npm run start:mon"
+    },
+    {
+      "name": "Test",
+      "execute": false,
+      "description": "JestTest",
+      "icon": "beaker",
+      "color": "terminal.ansiRed",
+      "command": "npm run test"
+    }
+  ]
+}

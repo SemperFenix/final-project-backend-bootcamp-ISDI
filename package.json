@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Backend for ISDI Bootcamp final project. Aikido Journey",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "test": "jest --watchAll --coverage",
     "test:prod": "jest --watchAll --coverage --watchAll=false --passWithNoTests"

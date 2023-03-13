@@ -1,7 +1,10 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable max-params */
-/* eslint-disable no-useless-constructor */
 
 import Tech from '../../techniques/domain/techniques';
+import createDebug from 'debug';
+
+const debug = createDebug('AiJo:AiUsClass');
 
 export type Grades =
   | '6º kyu'
@@ -20,20 +23,21 @@ export type Grades =
 
 export default class AikidoUser {
   constructor(
-    public _email: string,
-    public _password: string,
-    public _name: string,
-    public _lastName: string,
-    public _avatar: string,
-    public _grade: Grades,
-    public _techsLearnt: Tech[],
-    public _techsInProgress: Tech[],
-    public _techsToLearn: Tech[],
-    public _role: 'user' | 'sensei',
-    public _techToReview: string,
-    public _age?: number,
-    public _timePracticing?: string,
-    public _principalSensei?: AikidoUser,
-    public _mainUke?: AikidoUser
-  ) {}
+    public email: string,
+    public password: string,
+    public name: string,
+    public lastName: string,
+    public grade: Grades,
+    public techsLearnt: Tech[],
+    public techsInProgress: Tech[],
+    public role: 'user' | 'sensei',
+    public techToReview: string, // Esta propiedad está añadida por si me da tiempo a aumentar funcionalidades
+    public avatar?: string,
+    public age?: number,
+    public timePracticing?: string,
+    public principalSensei?: AikidoUser,
+    public mainUke?: AikidoUser
+  ) {
+    debug('Aikido User instantiated');
+  }
 }

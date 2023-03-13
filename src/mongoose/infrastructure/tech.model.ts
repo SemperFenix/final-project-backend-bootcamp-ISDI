@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import Tech from '../../techniques/domain/techniques';
+import Tech from '../../techniques/domain/tech';
 
 const techsSchema = new Schema<Tech>({
   attack: {

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-params */
 
-import Tech from '../../techniques/domain/techniques';
+import Tech from '../../techniques/domain/tech';
 import createDebug from 'debug';
 
 const debug = createDebug('AiJo:AiUsClass');

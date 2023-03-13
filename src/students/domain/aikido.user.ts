@@ -32,6 +32,7 @@ export default class AikidoUser {
     public techsInProgress: Tech[],
     public role: 'user' | 'sensei',
     public techToReview: string, // Esta propiedad está añadida por si me da tiempo a aumentar funcionalidades
+    public id?: string,
     public avatar?: string,
     public age?: number,
     public timePracticing?: string,

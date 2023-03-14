@@ -5,8 +5,8 @@ import ServerRouter from './server.router.js';
 import createDebug from 'debug';
 import morgan from 'morgan';
 import cors from 'cors';
-import { CustomError } from '../../common/errors/http.error.js';
 import { dbConnect } from './mongoose/db/db.connect.js';
+import { errorMiddleware } from './middleware/error.middleware.js';
 
 const debug = createDebug('AiJo:ExpServ');
 
@@ -25,24 +25,7 @@ export default class ExpressServer {
     this.app.use(express.json());
     this.app.use(morgan('dev'));
     this.app.use(cors({ origin: '*' }));
-    this.app.use(
-      (
-        error: CustomError,
-        _req: Request,
-        resp: Response,
-        _next: NextFunction
-      ) => {
-        const status = error.code || 500;
-        const statusMessage = error.outMsg || 'Internal Server Error';
-        resp.status(status);
-        debug('Error: ', status, statusMessage);
-        debug(error.name, ': ', error.message);
-
-        resp.json({
-          error: [{ status, statusMessage }],
-        });
-      }
-    );
+    this.app.use(errorMiddleware);
   }
 
   routes(): void {

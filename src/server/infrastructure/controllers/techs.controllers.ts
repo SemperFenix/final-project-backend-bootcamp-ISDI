@@ -24,14 +24,10 @@ export class TechsController {
     debug('Techs controller instantiated...');
   }
 
-  async create(req: Request, res: Response, next: NextFunction) {
-    try {
-      const newTech = await this.techCreator.execute(req.body);
-      res.status(201);
-      res.json({ results: [newTech] });
-    } catch (error) {
-      debug('Creation error =(');
-      next(error);
-    }
+  async create(req: Request, res: Response, _next: NextFunction) {
+    const newTech = await this.techCreator.execute(req.body);
+    debug('Tech added! =)');
+    res.status(201);
+    res.json({ results: [newTech] });
   }
 }

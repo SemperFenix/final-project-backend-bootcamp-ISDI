@@ -4,8 +4,8 @@ import AikidoUserQuerier from '../../../aikido.users/application/aikido.users.qu
 import AikidoUserQuerierId from '../../../aikido.users/application/aikido.users.querier.id';
 import AikidoUserSearcher from '../../../aikido.users/application/aikido.users.searcher';
 import AikidoUserUpdater from '../../../aikido.users/application/aikido.users.updater';
-import AikidoUserMongoRepo from '../../../aikido.users/infrastructure/aikido.users.mongo.repo';
 import {
+  mockAikidoUserRepo,
   mockNext,
   mockNoEmailReq,
   mockNoPassReq,
@@ -25,21 +25,12 @@ jest.mock('../../../../src/config.js', () => ({
 jest.mock('../../../services/auth.js');
 
 describe('Given the AikidoUsersController class', () => {
-  const mockRepo: AikidoUserMongoRepo = {
-    query: jest.fn(),
-    queryById: jest.fn(),
-    create: jest.fn(),
-    search: jest.fn(),
-    update: jest.fn(),
-    erase: jest.fn(),
-  };
-
-  const mockSearcher = new AikidoUserSearcher(mockRepo);
-  const mockQuerier = new AikidoUserQuerier(mockRepo);
-  const mockQuerierId = new AikidoUserQuerierId(mockRepo);
-  const mockCreator = new AikidoUserCreator(mockRepo);
-  const mockUpdater = new AikidoUserUpdater(mockRepo);
-  const mockEraser = new AikidoUserEraser(mockRepo);
+  const mockSearcher = new AikidoUserSearcher(mockAikidoUserRepo);
+  const mockQuerier = new AikidoUserQuerier(mockAikidoUserRepo);
+  const mockQuerierId = new AikidoUserQuerierId(mockAikidoUserRepo);
+  const mockCreator = new AikidoUserCreator(mockAikidoUserRepo);
+  const mockUpdater = new AikidoUserUpdater(mockAikidoUserRepo);
+  const mockEraser = new AikidoUserEraser(mockAikidoUserRepo);
   const count = 'TestPass';
 
   const controller = new AikidoUsersController(
@@ -58,7 +49,7 @@ describe('Given the AikidoUsersController class', () => {
   describe('When call the register method', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        (mockRepo.create as jest.Mock).mockResolvedValueOnce({
+        (mockAikidoUserRepo.create as jest.Mock).mockResolvedValueOnce({
           name: 'TestOk',
         });
         await controller.register(mockReq, mockRes, mockNext);
@@ -86,7 +77,7 @@ describe('Given the AikidoUsersController class', () => {
       test('Then it should call res.json', async () => {
         mockReq.body.password = count;
         (Auth.compareHash as jest.Mock).mockResolvedValueOnce(true);
-        (mockRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
+        (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
         await controller.login(mockReq, mockRes, mockNext);
         expect(mockRes.json).toHaveBeenCalled();
       });
@@ -107,7 +98,9 @@ describe('Given the AikidoUsersController class', () => {
     });
     describe('And there is no user with the id', () => {
       test('Then it should call next', async () => {
-        (mockRepo.search as jest.Mock).mockResolvedValueOnce(undefined);
+        (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(
+          undefined
+        );
 
         await controller.login(mockReq, mockRes, mockNext);
         expect(mockNext).toHaveBeenCalled();
@@ -116,7 +109,7 @@ describe('Given the AikidoUsersController class', () => {
     describe('And the password not matches', () => {
       test('Then it should call next', async () => {
         (Auth.compareHash as jest.Mock).mockResolvedValueOnce(false);
-        (mockRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
+        (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
         await controller.login(mockReq, mockRes, mockNext);
         expect(mockNext).toHaveBeenCalled();
       });

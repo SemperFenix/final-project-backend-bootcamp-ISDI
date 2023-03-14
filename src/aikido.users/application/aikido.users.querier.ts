@@ -10,7 +10,8 @@ export default class AikidoUserQuerier {
     debug('AikidoUserQuerier instantiated');
   }
 
-  async execute(): Promise<void> {
-    await this.repo.query();
+  async execute(): Promise<AikidoUser[]> {
+    const result = await this.repo.query();
+    return result;
   }
 }

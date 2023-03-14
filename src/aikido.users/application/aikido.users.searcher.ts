@@ -10,7 +10,10 @@ export default class AikidoUserSearcher {
     debug('AikidoUserSearcher instantiated');
   }
 
-  async execute(queries: { key: string; value: unknown }[]): Promise<void> {
-    await this.repo.search(queries);
+  async execute(
+    queries: { key: string; value: unknown }[]
+  ): Promise<AikidoUser[]> {
+    const result = await this.repo.search(queries);
+    return result;
   }
 }

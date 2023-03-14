@@ -10,7 +10,8 @@ export default class AikidoUserCreator {
     debug('AikidoUserCreator instantiated');
   }
 
-  async execute(entity: AikidoUser): Promise<void> {
-    await this.repo.create(entity);
+  async execute(entity: AikidoUser): Promise<AikidoUser> {
+    const result = await this.repo.create(entity);
+    return result;
   }
 }

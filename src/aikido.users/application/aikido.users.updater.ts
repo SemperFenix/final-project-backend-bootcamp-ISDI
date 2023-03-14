@@ -10,7 +10,8 @@ export default class AikidoUserUpdater {
     debug('AikidoUserUpdater instantiated');
   }
 
-  async execute(entity: Partial<AikidoUser>): Promise<void> {
-    await this.repo.update(entity);
+  async execute(entity: Partial<AikidoUser>): Promise<AikidoUser> {
+    const result = await this.repo.update(entity);
+    return result;
   }
 }

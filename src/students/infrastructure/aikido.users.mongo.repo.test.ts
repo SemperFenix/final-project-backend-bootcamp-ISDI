@@ -1,8 +1,8 @@
-import { AikidoUserModel } from '../../mongoose/infrastructure/aikido.user.model';
-import AikidoUser from '../domain/aikido.user';
-import AikidoUserMongoRepo from './aikido.users.mongo.repo';
+import { AikidoUserModel } from '../../server/infrastructure/mongoose/aikido.user.model.js';
+import { AikidoUser } from '../domain/aikido.user.js';
+import AikidoUserMongoRepo from './aikido.users.mongo.repo.js';
 
-jest.mock('../../mongoose/infrastructure/aikido.user.model');
+jest.mock('../../server/infrastructure/mongoose/aikido.user.model');
 const repo = new AikidoUserMongoRepo();
 let popValue: unknown;
 

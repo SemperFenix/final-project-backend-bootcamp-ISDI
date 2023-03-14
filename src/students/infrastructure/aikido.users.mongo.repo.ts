@@ -1,8 +1,8 @@
-import AikidoUserRepo from '../domain/aikido.user.repository';
+import AikidoUserRepo from '../domain/aikido.user.repo.js';
 import createDebug from 'debug';
-import AikidoUser from '../domain/aikido.user';
-import { AikidoUserModel } from '../../mongoose/infrastructure/aikido.user.model';
-import { HTTPError } from '../../errors/http.error';
+import { AikidoUser } from '../domain/aikido.user.js';
+import { HTTPError } from '../../common/errors/http.error.js';
+import { AikidoUserModel } from '../../server/infrastructure/mongoose/aikido.user.model.js';
 
 const debug = createDebug('AiJo:AiUsMongoRepo');
 

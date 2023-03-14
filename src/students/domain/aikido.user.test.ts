@@ -4,16 +4,16 @@ describe('Given the AikidoUser class', () => {
   describe('When instantiated', () => {
     test('Then it should create a new object of the class', () => {
       const aikidoUser = new AikidoUser(
-        '2',
-        'Test',
-        'Test',
-        'Test',
-        'Test',
+        'TestMail',
+        'TestPass',
+        'TestName',
+        'TestName',
         '1º kyu',
         [],
         [],
         'user',
-        'Test'
+        'TestTechId',
+        'TestId'
       );
       expect(aikidoUser).toBeInstanceOf(AikidoUser);
     });

@@ -2,7 +2,7 @@ import { AikidoUserModel } from '../../server/infrastructure/mongoose/aikido.use
 import { AikidoUser } from '../domain/aikido.user.js';
 import AikidoUserMongoRepo from './aikido.users.mongo.repo.js';
 
-jest.mock('../../mongoose/infrastructure/aikido.user.model');
+jest.mock('../../server/infrastructure/mongoose/aikido.user.model');
 const repo = new AikidoUserMongoRepo();
 let popValue: unknown;
 

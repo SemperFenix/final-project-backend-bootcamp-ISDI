@@ -1,8 +1,8 @@
-import { Tech } from './tech.js';
+import { ProtoTech, Tech } from './tech.js';
 
 export default interface TechRepo {
-  create: (_entity: Tech) => Promise<void>;
-  update: (_entity: Partial<Tech>) => Promise<void>;
+  create: (_entity: ProtoTech) => Promise<Tech>;
+  update: (_entity: Partial<Tech>) => Promise<Tech>;
   erase: (_id: string) => Promise<void>;
   query: () => Promise<Tech[]>;
   queryById: (_id: string) => Promise<Tech>;

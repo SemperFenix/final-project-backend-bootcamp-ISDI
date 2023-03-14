@@ -27,16 +27,19 @@ const aikidoUserSchema = new Schema<AikidoUser>({
     {
       type: Schema.Types.ObjectId,
       ref: 'Tech',
+      required: true,
     },
   ],
   techsInProgress: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Tech',
+      required: true,
     },
   ],
   role: {
     type: String,
+    required: true,
   },
   timePracticing: {
     type: String,

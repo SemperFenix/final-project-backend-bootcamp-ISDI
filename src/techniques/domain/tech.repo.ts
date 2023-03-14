@@ -1,4 +1,4 @@
-import Tech from './tech';
+import { Tech } from './tech.js';
 
 export default interface TechRepo {
   create: (_entity: Tech) => Promise<void>;

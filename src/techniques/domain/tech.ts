@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 /* eslint-disable max-params */
-import { AikidoUser, Grades } from '../../students/domain/aikido.user';
+import { AikidoUser, Grades } from '../../students/domain/aikido.user.js';
 import createDebug from 'debug';
 
 const debug = createDebug('AiJo:TechClass');

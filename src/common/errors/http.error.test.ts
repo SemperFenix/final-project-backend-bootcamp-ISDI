@@ -1,4 +1,4 @@
-import { HTTPError } from './http.error';
+import { HTTPError } from './http.error.js';
 
 describe('Given the AikidoUser class', () => {
   describe('When instantiated', () => {

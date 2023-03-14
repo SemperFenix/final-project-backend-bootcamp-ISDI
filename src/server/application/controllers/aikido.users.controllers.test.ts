@@ -1,10 +1,6 @@
-import AikidoUserCreator from '../../../aikido.users/application/aikido.users.creator';
-import AikidoUserEraser from '../../../aikido.users/application/aikido.users.eraser';
-import AikidoUserQuerier from '../../../aikido.users/application/aikido.users.querier';
-import AikidoUserQuerierId from '../../../aikido.users/application/aikido.users.querier.id';
-import AikidoUserSearcher from '../../../aikido.users/application/aikido.users.searcher';
-import AikidoUserUpdater from '../../../aikido.users/application/aikido.users.updater';
 import {
+  mockAikidoUsersController,
+  count,
   mockAikidoUserRepo,
   mockNext,
   mockNoEmailReq,
@@ -13,8 +9,6 @@ import {
   mockRes,
 } from '../../../common/mocks/test.mocks';
 import { Auth } from '../../../services/auth';
-
-import { AikidoUsersController } from './aikido.users.controllers';
 
 jest.mock('../../../../src/config.js', () => ({
   config: {
@@ -25,23 +19,6 @@ jest.mock('../../../../src/config.js', () => ({
 jest.mock('../../../services/auth.js');
 
 describe('Given the AikidoUsersController class', () => {
-  const mockSearcher = new AikidoUserSearcher(mockAikidoUserRepo);
-  const mockQuerier = new AikidoUserQuerier(mockAikidoUserRepo);
-  const mockQuerierId = new AikidoUserQuerierId(mockAikidoUserRepo);
-  const mockCreator = new AikidoUserCreator(mockAikidoUserRepo);
-  const mockUpdater = new AikidoUserUpdater(mockAikidoUserRepo);
-  const mockEraser = new AikidoUserEraser(mockAikidoUserRepo);
-  const count = 'TestPass';
-
-  const controller = new AikidoUsersController(
-    mockSearcher,
-    mockQuerier,
-    mockQuerierId,
-    mockCreator,
-    mockUpdater,
-    mockEraser
-  );
-
   afterEach(() => {
     jest.clearAllMocks();
   });
@@ -52,21 +29,29 @@ describe('Given the AikidoUsersController class', () => {
         (mockAikidoUserRepo.create as jest.Mock).mockResolvedValueOnce({
           name: 'TestOk',
         });
-        await controller.register(mockReq, mockRes, mockNext);
+        await mockAikidoUsersController.register(mockReq, mockRes, mockNext);
         expect(mockRes.json).toHaveBeenCalled();
       });
     });
 
     describe('And there is no email in body', () => {
       test('Then it should call next', async () => {
-        await controller.register(mockNoEmailReq, mockRes, mockNext);
+        await mockAikidoUsersController.register(
+          mockNoEmailReq,
+          mockRes,
+          mockNext
+        );
         expect(mockNext).toHaveBeenCalled();
       });
     });
 
     describe('And there is no password in body', () => {
       test('Then it should call next', async () => {
-        await controller.register(mockNoPassReq, mockRes, mockNext);
+        await mockAikidoUsersController.register(
+          mockNoPassReq,
+          mockRes,
+          mockNext
+        );
         expect(mockNext).toHaveBeenCalled();
       });
     });
@@ -78,21 +63,25 @@ describe('Given the AikidoUsersController class', () => {
         mockReq.body.password = count;
         (Auth.compareHash as jest.Mock).mockResolvedValueOnce(true);
         (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
-        await controller.login(mockReq, mockRes, mockNext);
+        await mockAikidoUsersController.login(mockReq, mockRes, mockNext);
         expect(mockRes.json).toHaveBeenCalled();
       });
     });
 
     describe('And there is no email in body', () => {
       test('Then it should call next', async () => {
-        await controller.login(mockNoEmailReq, mockRes, mockNext);
+        await mockAikidoUsersController.login(
+          mockNoEmailReq,
+          mockRes,
+          mockNext
+        );
         expect(mockNext).toHaveBeenCalled();
       });
     });
 
     describe('And there is no password in body', () => {
       test('Then it should call next', async () => {
-        await controller.login(mockNoPassReq, mockRes, mockNext);
+        await mockAikidoUsersController.login(mockNoPassReq, mockRes, mockNext);
         expect(mockNext).toHaveBeenCalled();
       });
     });
@@ -102,7 +91,7 @@ describe('Given the AikidoUsersController class', () => {
           undefined
         );
 
-        await controller.login(mockReq, mockRes, mockNext);
+        await mockAikidoUsersController.login(mockReq, mockRes, mockNext);
         expect(mockNext).toHaveBeenCalled();
       });
     });
@@ -110,7 +99,7 @@ describe('Given the AikidoUsersController class', () => {
       test('Then it should call next', async () => {
         (Auth.compareHash as jest.Mock).mockResolvedValueOnce(false);
         (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
-        await controller.login(mockReq, mockRes, mockNext);
+        await mockAikidoUsersController.login(mockReq, mockRes, mockNext);
         expect(mockNext).toHaveBeenCalled();
       });
     });

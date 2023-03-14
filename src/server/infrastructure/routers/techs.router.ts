@@ -1,5 +1,5 @@
 import { Router, Router as router } from 'express';
-import { TechsController } from '../controllers/techs.controllers.js';
+import { TechsController } from '../../application/controllers/techs.controllers.js';
 import ServerRouter from '../server.router.js';
 
 export default class TechRouter implements ServerRouter {

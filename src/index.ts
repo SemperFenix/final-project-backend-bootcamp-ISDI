@@ -5,11 +5,11 @@ import AikidoUserQuerierId from './aikido.users/application/aikido.users.querier
 import AikidoUserSearcher from './aikido.users/application/aikido.users.searcher.js';
 import AikidoUserUpdater from './aikido.users/application/aikido.users.updater.js';
 import AikidoUserMongoRepo from './aikido.users/infrastructure/aikido.users.mongo.repo.js';
-import { AikidoUsersController as AikidoUserController } from './server/infrastructure/controllers/aikido.users.controllers.js';
+import { AikidoUsersController as AikidoUserController } from './server/application/controllers/aikido.users.controllers.js';
 import ExpressServer from './server/infrastructure/express.server.js';
 import AikidoUserRouter from './server/infrastructure/routers/aikido.users.router.js';
 import { PORT } from './config.js';
-import { TechsController } from './server/infrastructure/controllers/techs.controllers.js';
+import { TechsController } from './server/application/controllers/techs.controllers.js';
 import TechSearcher from './techniques/application/techs.searcher.js';
 import TechQuerier from './techniques/application/techs.querier.js';
 import TechQuerierId from './techniques/application/techs.querier.id.js';

@@ -1,5 +1,5 @@
 import { Router, Router as router } from 'express';
-import { AikidoUsersController } from '../controllers/aikido.users.controllers.js';
+import { AikidoUsersController } from '../../application/controllers/aikido.users.controllers.js';
 import ServerRouter from '../server.router.js';
 
 export default class AikidoUserRouter implements ServerRouter {

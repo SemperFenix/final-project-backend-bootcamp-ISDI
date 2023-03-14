@@ -3,7 +3,7 @@ import { AikidoUser } from '../domain/aikido.user';
 import AikidoUserRepo from '../domain/aikido.user.repo';
 import createDebug from 'debug';
 
-const debug = createDebug('AiJo:UC_Searcher');
+const debug = createDebug('AiJo:AiUsUC_Searcher');
 
 export default class AikidoUserSearcher {
   constructor(private repo: AikidoUserRepo) {

@@ -1,4 +1,3 @@
-import { NextFunction, Request, Response } from 'express';
 import AikidoUserCreator from '../../../aikido.users/application/aikido.users.creator';
 import AikidoUserEraser from '../../../aikido.users/application/aikido.users.eraser';
 import AikidoUserQuerier from '../../../aikido.users/application/aikido.users.querier';
@@ -6,6 +5,13 @@ import AikidoUserQuerierId from '../../../aikido.users/application/aikido.users.
 import AikidoUserSearcher from '../../../aikido.users/application/aikido.users.searcher';
 import AikidoUserUpdater from '../../../aikido.users/application/aikido.users.updater';
 import AikidoUserMongoRepo from '../../../aikido.users/infrastructure/aikido.users.mongo.repo';
+import {
+  mockNext,
+  mockNoEmailReq,
+  mockNoPassReq,
+  mockReq,
+  mockRes,
+} from '../../../common/mocks/test.mocks';
 import { Auth } from '../../../services/auth';
 
 import { AikidoUsersController } from './aikido.users.controllers';
@@ -36,37 +42,6 @@ describe('Given the AikidoUsersController class', () => {
   const mockEraser = new AikidoUserEraser(mockRepo);
   const count = 'TestPass';
 
-  const mockReq = {
-    body: {
-      id: 'TestId',
-      email: 'TestMail',
-      password: count,
-      name: 'TestName',
-      lastName: 'TestLast',
-      grade: '2º kyu',
-    },
-  } as unknown as Request;
-
-  const mockNoEmailReq = {
-    body: {
-      password: count,
-      name: 'TestName',
-    },
-  } as unknown as Request;
-
-  const mockNoPassReq = {
-    body: {
-      email: 'TestMail',
-      name: 'TestName',
-    },
-  } as unknown as Request;
-
-  const mockRes = {
-    status: jest.fn(),
-    json: jest.fn(),
-  } as unknown as Response;
-
-  const mockNext = jest.fn() as NextFunction;
   const controller = new AikidoUsersController(
     mockSearcher,
     mockQuerier,

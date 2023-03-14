@@ -1,4 +1,4 @@
-import AikidoUser from './aikido.user';
+import { AikidoUser } from './aikido.user.js';
 
 export default interface AikidoUserRepo {
   create: (_entity: AikidoUser) => Promise<void>;

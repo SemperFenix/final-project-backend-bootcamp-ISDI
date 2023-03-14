@@ -1,6 +1,6 @@
 import AikidoUserRepo from '../domain/aikido.user.repo';
 import createDebug from 'debug';
-import AikidoUser from '../domain/aikido.user';
+import { AikidoUser } from '../domain/aikido.user';
 import { HTTPError } from '../../common/errors/http.error';
 import { AikidoUserModel } from '../../server/infrastructure/mongoose/aikido.user.model';
 

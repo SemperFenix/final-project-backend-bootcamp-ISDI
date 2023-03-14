@@ -14,14 +14,14 @@ export interface TokenPayload extends jwt.JwtPayload {
 export class Auth {
   static createToken(payload: TokenPayload) {
     if (!config.secret) throw new Error('No secret');
-    return jwt.sign(payload, config.secret as string);
+    return jwt.sign(payload, config.secret);
   }
 
   static getTokenInfo(token: string) {
     if (!config.secret) throw new Error('No secretto');
-    const tokenInfo = jwt.verify(token, config.secret as string);
+    const tokenInfo = jwt.verify(token, config.secret);
     if (typeof tokenInfo === 'string')
-      throw new HTTPError(498, 'Invalid Token', tokenInfo as string);
+      throw new HTTPError(498, 'Invalid Token', tokenInfo);
     return tokenInfo as TokenPayload;
   }
 

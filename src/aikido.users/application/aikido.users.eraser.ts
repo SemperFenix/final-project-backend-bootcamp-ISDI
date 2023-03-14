@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { AikidoUser } from '../domain/aikido.user';
 import AikidoUserRepo from '../domain/aikido.user.repo';
 import createDebug from 'debug';
 

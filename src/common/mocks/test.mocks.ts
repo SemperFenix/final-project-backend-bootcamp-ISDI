@@ -1,6 +1,26 @@
 import { NextFunction, Request, Response } from 'express';
+import AikidoUserMongoRepo from '../../aikido.users/infrastructure/aikido.users.mongo.repo';
+import TechMongoRepo from '../../techniques/infrastructure/techs.mongo.repo';
 
 const count = 'TestPass';
+
+export const mockTechRepo: TechMongoRepo = {
+  query: jest.fn(),
+  queryById: jest.fn(),
+  create: jest.fn(),
+  search: jest.fn(),
+  update: jest.fn(),
+  erase: jest.fn(),
+};
+
+export const mockAikidoUserRepo: AikidoUserMongoRepo = {
+  query: jest.fn(),
+  queryById: jest.fn(),
+  create: jest.fn(),
+  search: jest.fn(),
+  update: jest.fn(),
+  erase: jest.fn(),
+};
 
 export const mockReq = {
   body: {

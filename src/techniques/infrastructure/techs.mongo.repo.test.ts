@@ -4,29 +4,27 @@ import TechMongoRepo from './techs.mongo.repo.js';
 
 jest.mock('../../server/infrastructure/mongoose/tech.model');
 const repo = new TechMongoRepo();
-let popValue: unknown;
+let popTechValue: unknown;
 
-// Creo este mock para evitar el warning de Eslint de too many callback nesting
-// Asignando una variable al mockResolvedValue puedo llevar a cabo distintos tests usando el mismo mock
-const mockPopulateExec = () => ({
+const mockTechPopulExec = () => ({
   populate: jest.fn().mockImplementation(() => ({
     populate: jest.fn().mockImplementation(() => ({
       populate: jest.fn().mockImplementation(() => ({
-        exec: jest.fn().mockResolvedValue(popValue),
+        exec: jest.fn().mockResolvedValue(popTechValue),
       })),
     })),
   })),
 });
 
 const mockExec = () => ({
-  exec: jest.fn().mockResolvedValue(popValue),
+  exec: jest.fn().mockResolvedValue(popTechValue),
 });
 
 describe('Given the TechsRepo', () => {
   describe('When call the Query method', () => {
     test('Then it should return the Techs array', async () => {
-      popValue = [{}];
-      (TechModel.find as jest.Mock).mockImplementation(mockPopulateExec);
+      popTechValue = [{}];
+      (TechModel.find as jest.Mock).mockImplementation(mockTechPopulExec);
       const result = await repo.query();
       expect(result).toEqual([{}]);
     });
@@ -35,8 +33,8 @@ describe('Given the TechsRepo', () => {
   describe('When call the queryById method', () => {
     describe('And the id returns a user', () => {
       test('Then it should return the user', async () => {
-        popValue = {};
-        (TechModel.findById as jest.Mock).mockImplementation(mockPopulateExec);
+        popTechValue = {};
+        (TechModel.findById as jest.Mock).mockImplementation(mockTechPopulExec);
         const result = await repo.queryById('1');
         expect(result).toEqual({});
       });
@@ -44,8 +42,8 @@ describe('Given the TechsRepo', () => {
 
     describe('And the id not returns a user', () => {
       test('Then it should throw error', async () => {
-        popValue = undefined;
-        (TechModel.findById as jest.Mock).mockImplementation(mockPopulateExec);
+        popTechValue = undefined;
+        (TechModel.findById as jest.Mock).mockImplementation(mockTechPopulExec);
         const result = repo.queryById('1');
         await expect(result).rejects.toThrow();
       });
@@ -54,8 +52,8 @@ describe('Given the TechsRepo', () => {
 
   describe('When called the search method', () => {
     test('Then it should return the Techs array', async () => {
-      popValue = [{}];
-      (TechModel.find as jest.Mock).mockImplementation(mockPopulateExec);
+      popTechValue = [{}];
+      (TechModel.find as jest.Mock).mockImplementation(mockTechPopulExec);
       const result = await repo.search([
         { key: 'Test', value: 'testing' },
         { key: 'Test2', value: 'testing2' },
@@ -75,7 +73,7 @@ describe('Given the TechsRepo', () => {
   describe('When call the update method', () => {
     describe('And the user exists', () => {
       test('Then it should return the user updated', async () => {
-        popValue = { attack: 'Test' };
+        popTechValue = { attack: 'Test' };
         (TechModel.findByIdAndUpdate as jest.Mock).mockImplementation(mockExec);
         const entity = { attack: 'Test', id: '1' };
         await repo.update(entity);
@@ -91,7 +89,7 @@ describe('Given the TechsRepo', () => {
 
     describe('And the id not returns a user', () => {
       test('Then it should throw error', async () => {
-        popValue = undefined;
+        popTechValue = undefined;
         (TechModel.findByIdAndUpdate as jest.Mock).mockImplementation(mockExec);
         const result = repo.update({ attack: 'Test' });
         await expect(result).rejects.toThrow();
@@ -102,7 +100,7 @@ describe('Given the TechsRepo', () => {
   describe('When call the erase method', () => {
     describe('And the user exists', () => {
       test('Then it should delete the user', async () => {
-        popValue = {};
+        popTechValue = {};
         (TechModel.findByIdAndDelete as jest.Mock).mockImplementation(mockExec);
         await repo.erase('2');
         expect(TechModel.findByIdAndDelete).toHaveBeenCalledWith('2');
@@ -111,7 +109,7 @@ describe('Given the TechsRepo', () => {
 
     describe('And the id not returns a user', () => {
       test('Then it should throw error', async () => {
-        popValue = undefined;
+        popTechValue = undefined;
         (TechModel.findByIdAndDelete as jest.Mock).mockImplementation(mockExec);
         const result = repo.erase('2');
         await expect(result).rejects.toThrow();

@@ -1,14 +1,13 @@
 import jwt from 'jsonwebtoken';
-import { config } from '../config';
-import { Auth, TokenPayload } from './auth';
+import { config } from '../config.js';
+import { Auth, TokenPayload } from './auth.js';
 import bcrypt from 'bcryptjs';
 
 jest.mock('bcryptjs');
 
 jest.mock('../config', () => ({
-  __dirname: 'testdir',
   config: {
-    secret: 'a',
+    secret: 'TestSecret',
   },
 }));
 
@@ -33,7 +32,6 @@ describe('Given the Auth class', () => {
           a: test,
         } as unknown as TokenPayload;
         const createToken = () => Auth.createToken(token);
-        // Esta estructura es para evitar el aviso de Eslint de too many callbacks nested
         expect(createToken).toThrow();
       });
     });
@@ -48,8 +46,8 @@ describe('Given the Auth class', () => {
 
     describe('When a secret is provided', () => {
       test('Then it should return the token info', async () => {
-        config.secret = 'a';
-        Auth.getTokenInfo('a');
+        config.secret = 'TestSecret';
+        Auth.getTokenInfo('TestToken');
         expect(jwt.verify).toHaveBeenCalled();
       });
     });
@@ -58,7 +56,7 @@ describe('Given the Auth class', () => {
       test('Then it should throw error', () => {
         (jwt.verify as jest.Mock).mockReturnValue('test');
         expect(() => {
-          Auth.getTokenInfo('a');
+          Auth.getTokenInfo('TestToken');
         }).toThrow();
       });
     });

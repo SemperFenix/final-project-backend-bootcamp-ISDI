@@ -9,7 +9,6 @@ export default {
   coveragePathIgnorePatterns: [
     'index.ts',
     'app.ts',
-    'routers',
     'config.ts',
     'mocks',
     '/*.model.*',

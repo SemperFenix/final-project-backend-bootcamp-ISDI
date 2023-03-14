@@ -1,5 +1,5 @@
 import { model, Schema } from 'mongoose';
-import { AikidoUser } from '../../../students/domain/aikido.user.js';
+import { AikidoUser } from '../../../aikido.users/domain/aikido.user.js';
 
 const aikidoUserSchema = new Schema<AikidoUser>({
   email: {

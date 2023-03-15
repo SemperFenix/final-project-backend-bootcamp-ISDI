@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import express, { Express, Request, Response, NextFunction } from 'express';
-import http from 'http';
+import http, { Server } from 'http';
 import ServerRouter from './server.router.js';
 import createDebug from 'debug';
 import morgan from 'morgan';
@@ -34,9 +34,8 @@ export default class ExpressServer {
     });
   }
 
-  start(port: number): void {
+  start(port: number): Server {
     const server = http.createServer(this.app);
-
     dbConnect().then((mongoose) => {
       server.listen(port);
       debug('Connected to DB: ', mongoose.connection.db.databaseName);
@@ -44,5 +43,7 @@ export default class ExpressServer {
     server.on('listening', () => {
       debug(`Server running on port ${port}`);
     });
+
+    return server;
   }
 }

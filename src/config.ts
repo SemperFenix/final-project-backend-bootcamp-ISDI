@@ -9,3 +9,5 @@ export const config = {
   collection: process.env.DB_NAME,
   secret: process.env.DB_SECRET,
 };
+
+export const PORT = Number(process.env.PORT) || 4742;

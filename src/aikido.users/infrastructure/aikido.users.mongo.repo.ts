@@ -1,6 +1,6 @@
 import AikidoUserRepo from '../domain/aikido.user.repo.js';
 import createDebug from 'debug';
-import { AikidoUser } from '../domain/aikido.user.js';
+import { AikidoUser, ProtoAikidoUser } from '../domain/aikido.user.js';
 import { HTTPError } from '../../common/errors/http.error.js';
 import { AikidoUserModel } from '../../server/infrastructure/mongoose/aikido.user.model.js';
 
@@ -52,12 +52,13 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
     return members;
   }
 
-  async create(entity: AikidoUser): Promise<void> {
-    await AikidoUserModel.create(entity);
+  async create(entity: ProtoAikidoUser): Promise<AikidoUser> {
+    const newAikidoUser = await AikidoUserModel.create(entity);
     debug('Hey, you! ;)');
+    return newAikidoUser;
   }
 
-  async update(entity: Partial<AikidoUser>): Promise<void> {
+  async update(entity: Partial<AikidoUser>): Promise<AikidoUser> {
     const updatedAikidoUser = await AikidoUserModel.findByIdAndUpdate(
       entity.id,
       entity,
@@ -70,6 +71,7 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
         'Update not possible: id not found'
       );
     debug('Member updated!');
+    return updatedAikidoUser;
   }
 
   async erase(id: string): Promise<void> {

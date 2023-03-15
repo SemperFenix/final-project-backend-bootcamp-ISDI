@@ -64,19 +64,20 @@ describe('Given the TechsRepo', () => {
 
   describe('When call the create method', () => {
     test('Then it should return the created Tech', async () => {
-      (TechModel.create as jest.Mock).mockResolvedValue({});
-      await repo.create({ attack: 'Test' } as Tech);
+      (TechModel.create as jest.Mock).mockResolvedValue({ attack: 'Test' });
+      const result = await repo.create({ attack: 'Test' } as Tech);
       expect(TechModel.create).toHaveBeenCalledWith({ attack: 'Test' });
+      expect(result).toEqual({ attack: 'Test' });
     });
   });
 
   describe('When call the update method', () => {
     describe('And the user exists', () => {
       test('Then it should return the user updated', async () => {
-        popTechValue = { attack: 'Test' };
+        popTechValue = { attack: 'UpdTest', id: '1' };
         (TechModel.findByIdAndUpdate as jest.Mock).mockImplementation(mockExec);
         const entity = { attack: 'Test', id: '1' };
-        await repo.update(entity);
+        const result = await repo.update(entity);
         expect(TechModel.findByIdAndUpdate).toHaveBeenCalledWith(
           entity.id,
           entity,
@@ -84,6 +85,7 @@ describe('Given the TechsRepo', () => {
             new: true,
           }
         );
+        expect(result).toEqual({ id: '1', attack: 'UpdTest' });
       });
     });
 

@@ -72,21 +72,22 @@ describe('Given the AikidoUsersRepo', () => {
 
   describe('When call the create method', () => {
     test('Then it should return the created AikidoUser', async () => {
-      (AikidoUserModel.create as jest.Mock).mockResolvedValue({});
-      await repo.create({ name: 'Test' } as AikidoUser);
+      (AikidoUserModel.create as jest.Mock).mockResolvedValue({ name: 'Test' });
+      const result = await repo.create({ name: 'Test' } as AikidoUser);
       expect(AikidoUserModel.create).toHaveBeenCalledWith({ name: 'Test' });
+      expect(result).toEqual({ name: 'Test' });
     });
   });
 
   describe('When call the update method', () => {
     describe('And the user exists', () => {
       test('Then it should return the user updated', async () => {
-        popValue = { name: 'Pedro' };
+        popValue = { name: 'Pedro', id: '1' };
         (AikidoUserModel.findByIdAndUpdate as jest.Mock).mockImplementation(
           mockExec
         );
         const entity = { name: 'Test', id: '1' };
-        await repo.update(entity);
+        const result = await repo.update(entity);
         expect(AikidoUserModel.findByIdAndUpdate).toHaveBeenCalledWith(
           entity.id,
           entity,
@@ -94,6 +95,7 @@ describe('Given the AikidoUsersRepo', () => {
             new: true,
           }
         );
+        expect(result).toEqual({ id: '1', name: 'Pedro' });
       });
     });
 

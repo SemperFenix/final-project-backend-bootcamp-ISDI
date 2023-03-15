@@ -6,13 +6,5 @@ export default {
   // Esto sustituye a @babel, debería
   resolver: 'jest-ts-webcompat-resolver',
   collectCoverageFrom: ['src/**/*.ts'],
-  coveragePathIgnorePatterns: [
-    'index.ts',
-    'app.ts',
-    'routers',
-    'config.ts',
-    'mocks',
-    '/*.model.*',
-    'helpers',
-  ],
+  coveragePathIgnorePatterns: ['index.ts', 'config.ts', 'mocks', '/*.model.*'],
 };

@@ -1,8 +1,8 @@
-import { AikidoUser } from './aikido.user.js';
+import { AikidoUser, ProtoAikidoUser } from './aikido.user.js';
 
 export default interface AikidoUserRepo {
-  create: (_entity: AikidoUser) => Promise<void>;
-  update: (_entity: Partial<AikidoUser>) => Promise<void>;
+  create: (_entity: ProtoAikidoUser) => Promise<AikidoUser>;
+  update: (_entity: Partial<AikidoUser>) => Promise<AikidoUser>;
   erase: (_id: string) => Promise<void>;
   query: () => Promise<AikidoUser[]>;
   queryById: (_id: string) => Promise<AikidoUser>;

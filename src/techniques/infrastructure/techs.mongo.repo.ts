@@ -1,8 +1,7 @@
 import createDebug from 'debug';
-
 import { HTTPError } from '../../common/errors/http.error.js';
 import { TechModel } from '../../server/infrastructure/mongoose/tech.model.js';
-import { Tech } from '../domain/tech.js';
+import { ProtoTech, Tech } from '../domain/tech.js';
 import TechRepo from '../domain/tech.repo.js';
 
 const debug = createDebug('AiJo:AiUsMongoRepo');
@@ -47,12 +46,13 @@ export default class TechMongoRepo implements TechRepo {
     return techs;
   }
 
-  async create(entity: Tech): Promise<void> {
-    await TechModel.create(entity);
+  async create(entity: ProtoTech): Promise<Tech> {
+    const newTech = await TechModel.create(entity);
     debug('Hey, nice tech! ;)');
+    return newTech;
   }
 
-  async update(entity: Partial<Tech>): Promise<void> {
+  async update(entity: Partial<Tech>): Promise<Tech> {
     const updatedTech = await TechModel.findByIdAndUpdate(entity.id, entity, {
       new: true,
     }).exec();
@@ -63,6 +63,7 @@ export default class TechMongoRepo implements TechRepo {
         'Update not possible: id not found'
       );
     debug('Tech updated!');
+    return updatedTech;
   }
 
   async erase(id: string): Promise<void> {

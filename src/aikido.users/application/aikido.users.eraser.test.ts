@@ -1,4 +1,4 @@
-import { mockAikidoUserRepo } from '../../common/mocks/test.mocks';
+import { mockAikidoUserRepo } from '../../common/mocks/test.mocks.js';
 import AikidoUserEraser from './aikido.users.eraser';
 
 describe('Given the AikidoUserEraser class', () => {

@@ -1,5 +1,5 @@
 /* eslint-disable no-unused-vars */
-import AikidoUserRepo from '../domain/aikido.user.repo';
+import AikidoUserRepo from '../domain/aikido.user.repo.js';
 import createDebug from 'debug';
 
 const debug = createDebug('AiJo:AiUsUC_Eraser');

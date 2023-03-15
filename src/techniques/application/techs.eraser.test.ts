@@ -1,5 +1,5 @@
-import { mockTechRepo } from '../../common/mocks/test.mocks';
-import TechEraser from './techs.eraser';
+import { mockTechRepo } from '../../common/mocks/test.mocks.js';
+import TechEraser from './techs.eraser.js';
 
 describe('Given the TechEraser class', () => {
   describe('When call its execute method', () => {

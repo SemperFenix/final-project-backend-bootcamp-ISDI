@@ -1,5 +1,5 @@
-import { mockAikidoUsersController } from '../../../common/mocks/test.mocks';
-import AikidoUserRouter from './aikido.users.router';
+import { mockAikidoUsersController } from '../../../common/mocks/test.mocks.js';
+import AikidoUserRouter from './aikido.users.router.js';
 
 describe('Given the AikidoUsersRouter', () => {
   describe('When instantiated', () => {

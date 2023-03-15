@@ -1,8 +1,8 @@
-import { mockAikidoUsersController } from '../../common/mocks/test.mocks';
-import ExpressServer from './express.server';
-import AikidoUserRouter from './routers/aikido.users.router';
+import { mockAikidoUsersController } from '../../common/mocks/test.mocks.js';
+import ExpressServer from './express.server.js';
+import AikidoUserRouter from './routers/aikido.users.router.js';
 import http from 'http';
-import { dbConnect } from './mongoose/db/db.connect';
+import { dbConnect } from './mongoose/db/db.connect.js';
 
 // Comentado para continuar con ello
 jest.mock('./mongoose/db/db.connect', () => ({

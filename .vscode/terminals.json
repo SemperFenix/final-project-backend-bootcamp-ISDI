@@ -4,7 +4,7 @@
     {
       "name": "Build",
       "open": true,
-      "execute": true,
+      "execute": false,
       "description": "TSCompiler",
       "substitution": false,
       "icon": "unfold",
@@ -13,7 +13,7 @@
     },
     {
       "name": "Serv:mon",
-      "execute": true,
+      "execute": false,
       "description": "ServerNodemon",
       "icon": "server-environment",
       "color": "terminal.ansiYellow",

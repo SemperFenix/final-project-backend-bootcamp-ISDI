@@ -4,7 +4,7 @@ import {
   mockRes,
   mockTechRepo,
   mockTechsController,
-} from '../../../common/mocks/test.mocks';
+} from '../../../common/mocks/test.mocks.js';
 
 jest.mock('../../../../src/config.js', () => ({
   config: {

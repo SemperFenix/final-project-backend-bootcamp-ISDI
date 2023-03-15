@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
-import { CustomError } from '../../../common/errors/http.error';
+import { CustomError } from '../../../common/errors/http.error.js';
 import createDebug from 'debug';
 
 const debug = createDebug('AiJo:ErrorMiddle');

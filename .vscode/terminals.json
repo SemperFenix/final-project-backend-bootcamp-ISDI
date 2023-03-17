@@ -2,30 +2,39 @@
   "autorun": true,
   "terminals": [
     {
-      "name": "Build",
+      "name": "Git",
+      "shellPath": "C:\\Program Files\\Git\\bin\\bash.exe",
       "open": true,
-      "execute": false,
       "description": "TSCompiler",
-      "substitution": false,
+      "icon": "repo",
+      "color": "terminal.ansiGreen"
+    },
+    {
+      "name": "BUILD",
+      "shellPath": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "execute": true,
+      "description": "TSCompiler",
       "icon": "unfold",
       "color": "terminal.ansiCyan",
       "command": "npm run build"
     },
     {
-      "name": "Serv:mon",
+      "name": "TEST",
       "execute": false,
-      "description": "ServerNodemon",
-      "icon": "server-environment",
-      "color": "terminal.ansiYellow",
-      "commands": "npm run start:mon"
-    },
-    {
-      "name": "Test",
-      "execute": false,
+      "shellPath": "C:\\Program Files\\Git\\bin\\bash.exe",
       "description": "JestTest",
       "icon": "beaker",
       "color": "terminal.ansiRed",
       "command": "npm run test"
+    },
+    {
+      "name": "SERVER",
+      "execute": true,
+      "shellPath": "C:\\Program Files\\Git\\bin\\bash.exe",
+      "description": "ServerUp",
+      "icon": "server-environment",
+      "color": "terminal.ansiYellow",
+      "command": "npm run start:mon"
     }
   ]
 }

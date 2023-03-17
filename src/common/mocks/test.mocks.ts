@@ -7,6 +7,7 @@ import AikidoUserSearcher from '../../aikido.users/application/aikido.users.sear
 import AikidoUserUpdater from '../../aikido.users/application/aikido.users.updater.js';
 import AikidoUserMongoRepo from '../../aikido.users/infrastructure/aikido.users.mongo.repo.js';
 import { AikidoUsersController } from '../../server/application/controllers/aikido.users.controllers.js';
+import { DefaultController } from '../../server/application/controllers/default.controller.js';
 import { TechsController } from '../../server/application/controllers/techs.controllers.js';
 import TechCreator from '../../techniques/application/techs.creator.js';
 import TechEraser from '../../techniques/application/techs.eraser.js';
@@ -67,6 +68,8 @@ export const mockTechsController = new TechsController(
   mockTechUpdater,
   mockTechEraser
 );
+
+export const mockDefaultController = new DefaultController();
 
 export const mockReq = {
   body: {

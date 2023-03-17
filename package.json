@@ -7,8 +7,10 @@
   "scripts": {
     "start": "cross-env DEBUG=AiJo* PORT=4500 node ./dist/index.js",
     "start:mon": "cross-env DEBUG=AiJo* PORT=4500 nodemon ./dist/index.js",
+    "prebuild": "npm run copy:public",
     "build": "tsc -w",
     "build:prod": "tsc",
+    "copy:public": "copyfiles -u 1 src/common/public/*.* dist",
     "test": "jest --watchAll --coverage",
     "test:prod": "jest --watchAll --coverage --watchAll=false --passWithNoTests"
   },
@@ -41,6 +43,7 @@
     "@typescript-eslint/eslint-plugin": "^5.53.0",
     "@typescript-eslint/parser": "^5.53.0",
     "bcryptjs": "^2.4.3",
+    "copyfiles": "^2.4.1",
     "cors": "^2.8.5",
     "cross-env": "^7.0.3",
     "debug": "^4.3.4",

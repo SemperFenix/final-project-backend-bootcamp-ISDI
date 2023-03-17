@@ -20,6 +20,12 @@ const mockPopulateExec = () => ({
   })),
 });
 
+const mockLimit = () => ({
+  skip: jest.fn().mockImplementation(() => ({
+    limit: jest.fn().mockImplementation(mockPopulateExec),
+  })),
+});
+
 const mockExec = () => ({
   exec: jest.fn().mockResolvedValue(popValue),
 });
@@ -66,6 +72,21 @@ describe('Given the AikidoUsersRepo', () => {
         { key: 'Test', value: 'testing' },
         { key: 'Test2', value: 'testing2' },
       ]);
+      expect(result).toEqual([{}]);
+    });
+  });
+
+  describe('When called the searchPaged method', () => {
+    test('Then it should return the AikidoUsers array', async () => {
+      popValue = [{}];
+      (AikidoUserModel.find as jest.Mock).mockImplementation(mockLimit);
+      const result = await repo.searchPaged(
+        [
+          { key: 'Test', value: 'testing' },
+          { key: 'Test2', value: 'testing2' },
+        ],
+        0
+      );
       expect(result).toEqual([{}]);
     });
   });

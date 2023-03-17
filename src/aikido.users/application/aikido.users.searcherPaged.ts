@@ -12,7 +12,7 @@ export default class AikidoUserSearcherPaged {
 
   async execute(
     queries: { key: string; value: unknown }[],
-    page: number
+    page: string
   ): Promise<{ members: AikidoUser[]; number: number }> {
     const result = await this.repo.searchPaged(queries, page);
     return result;

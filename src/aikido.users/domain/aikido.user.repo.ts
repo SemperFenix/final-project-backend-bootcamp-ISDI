@@ -11,6 +11,6 @@ export default interface AikidoUserRepo {
   ) => Promise<AikidoUser[]>;
   searchPaged: (
     _queries: { key: string; value: unknown }[],
-    _page: number
+    _page: string
   ) => Promise<{ members: AikidoUser[]; number: number }>;
 }

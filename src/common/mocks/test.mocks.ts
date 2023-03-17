@@ -96,7 +96,7 @@ export const mockCustomReq = {
     name: 'TestName',
     lastName: 'TestLast',
     grade: '2º kyu',
-    page: 1,
+    page: '1',
   },
   credentials: {
     role: 'user',

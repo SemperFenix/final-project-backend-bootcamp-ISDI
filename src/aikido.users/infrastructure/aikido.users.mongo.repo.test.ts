@@ -25,15 +25,32 @@ const mockLimit = () => ({
     limit: jest.fn().mockImplementation(mockPopulateExec),
   })),
 });
+let count = 0;
 
 const mockCount = () => ({
   count: jest
     .fn()
-    .mockImplementation(() => ({ exec: jest.fn().mockResolvedValue(0) })),
+    .mockImplementation(() => ({ exec: jest.fn().mockResolvedValue(count) })),
 });
 const mockExec = () => ({
   exec: jest.fn().mockResolvedValue(popValue),
 });
+
+const arrangeSearch = async (page: string) => {
+  popValue = [{}];
+  popValue = [{}];
+  (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
+
+  (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
+  const result = await repo.searchPaged(
+    [
+      { key: 'Test', value: 'testing' },
+      { key: 'Test2', value: 'testing2' },
+    ],
+    page
+  );
+  return result;
+};
 
 describe('Given the AikidoUsersRepo', () => {
   describe('When call the Query method', () => {
@@ -81,20 +98,38 @@ describe('Given the AikidoUsersRepo', () => {
     });
   });
 
-  describe('When called the searchPaged method', () => {
-    test('Then it should return the AikidoUsers array', async () => {
-      popValue = [{}];
-      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
-
-      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
-      const result = await repo.searchPaged(
-        [
-          { key: 'Test', value: 'testing' },
-          { key: 'Test2', value: 'testing2' },
-        ],
-        0
-      );
+  describe('When called the searchPaged method with page 0', () => {
+    test('Then it should return the AikidoUsers array with page 1', async () => {
+      const result = await arrangeSearch('0');
       expect(result).toEqual({ members: [{}], number: 0 });
+    });
+  });
+
+  describe('When called the searchPaged method with page 2', () => {
+    test('Then it should return the AikidoUsers array skipping the first 6', async () => {
+      const result = await arrangeSearch('2');
+
+      expect(result).toEqual({ members: [{}], number: 0 });
+    });
+  });
+
+  describe('When called the searchPaged method with page 1', () => {
+    describe('And there is more than 3 items', () => {
+      test('Then it should return the AikidoUsers array without skipping', async () => {
+        popValue = [{}];
+        count = 5;
+        (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
+
+        (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
+        const result = await repo.searchPaged(
+          [
+            { key: 'Test', value: 'testing' },
+            { key: 'Test2', value: 'testing2' },
+          ],
+          '1'
+        );
+        expect(result).toEqual({ members: [{}], number: 5 });
+      });
     });
   });
 

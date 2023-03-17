@@ -26,6 +26,11 @@ const mockLimit = () => ({
   })),
 });
 
+const mockCount = () => ({
+  count: jest
+    .fn()
+    .mockImplementation(() => ({ exec: jest.fn().mockResolvedValue(0) })),
+});
 const mockExec = () => ({
   exec: jest.fn().mockResolvedValue(popValue),
 });
@@ -79,9 +84,7 @@ describe('Given the AikidoUsersRepo', () => {
   describe('When called the searchPaged method', () => {
     test('Then it should return the AikidoUsers array', async () => {
       popValue = [{}];
-      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(() => ({
-        count: jest.fn().mockResolvedValue(0),
-      }));
+      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
 
       (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
       const result = await repo.searchPaged(

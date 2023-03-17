@@ -58,7 +58,9 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
   ): Promise<{ members: AikidoUser[]; number: number }> {
     const protoQuery = queries.map((item) => ({ [item.key]: item.value }));
     const myQueries = protoQuery.reduce((obj, item) => ({ ...obj, ...item }));
-    const number = await AikidoUserModel.find({ ...myQueries }).count();
+    const number = await AikidoUserModel.find({ ...myQueries })
+      .count()
+      .exec();
 
     const members = await AikidoUserModel.find({ ...myQueries })
       .skip(page)

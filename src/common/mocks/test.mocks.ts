@@ -88,7 +88,29 @@ export const mockReq = {
   },
 } as unknown as Request;
 
+export const mockCustomReq = {
+  body: {
+    id: 'TestId',
+    email: 'TestMail',
+    password: count,
+    name: 'TestName',
+    lastName: 'TestLast',
+    grade: '2º kyu',
+    page: 1,
+  },
+  credentials: {
+    role: 'user',
+  },
+} as unknown as Request;
+
 export const mockNoEmailReq = {
+  body: {
+    password: count,
+    name: 'TestName',
+  },
+} as unknown as Request;
+
+export const mockNoPageReq = {
   body: {
     password: count,
     name: 'TestName',

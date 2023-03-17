@@ -52,6 +52,25 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
     return members;
   }
 
+  async searchPaged(
+    queries: { key: string; value: unknown }[],
+    page: number
+  ): Promise<AikidoUser[]> {
+    const protoQuery = queries.map((item) => ({ [item.key]: item.value }));
+    const myQueries = protoQuery.reduce((obj, item) => ({ ...obj, ...item }));
+    const members = await AikidoUserModel.find({ ...myQueries })
+      .skip(page)
+      .limit(3)
+      .populate('techsLearnt')
+      .populate('techsInProgress')
+      .populate('principalSensei')
+      .populate('mainUke')
+      .exec();
+
+    debug('Search completed! =)');
+    return members;
+  }
+
   async create(entity: ProtoAikidoUser): Promise<AikidoUser> {
     const newAikidoUser = await AikidoUserModel.create(entity);
     debug('Hey, you! ;)');

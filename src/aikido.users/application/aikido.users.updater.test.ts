@@ -1,6 +1,6 @@
-import { mockAikidoUserRepo } from '../../common/mocks/test.mocks';
-import { AikidoUser } from '../domain/aikido.user';
-import AikidoUserUpdater from './aikido.users.updater';
+import { mockAikidoUserRepo } from '../../common/mocks/test.mocks.js';
+import { AikidoUser } from '../domain/aikido.user.js';
+import AikidoUserUpdater from './aikido.users.updater.js';
 
 describe('Given the AikidoUserUpdater class', () => {
   describe('When call its execute method', () => {

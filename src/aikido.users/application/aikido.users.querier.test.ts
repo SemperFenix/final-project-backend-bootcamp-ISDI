@@ -1,5 +1,5 @@
-import { mockAikidoUserRepo } from '../../common/mocks/test.mocks';
-import AikidoUserQuerier from './aikido.users.querier';
+import { mockAikidoUserRepo } from '../../common/mocks/test.mocks.js';
+import AikidoUserQuerier from './aikido.users.querier.js';
 
 describe('Given the AikidoUserQuerier class', () => {
   describe('When call its execute method', () => {

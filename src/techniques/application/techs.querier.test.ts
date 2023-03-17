@@ -1,4 +1,4 @@
-import { mockTechRepo } from '../../common/mocks/test.mocks';
+import { mockTechRepo } from '../../common/mocks/test.mocks.js';
 import TechQuerier from './techs.querier.js';
 
 describe('Given the TechQuerier class', () => {

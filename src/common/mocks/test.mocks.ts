@@ -1,20 +1,21 @@
 import { NextFunction, Request, Response } from 'express';
-import AikidoUserCreator from '../../aikido.users/application/aikido.users.creator';
-import AikidoUserEraser from '../../aikido.users/application/aikido.users.eraser';
-import AikidoUserQuerier from '../../aikido.users/application/aikido.users.querier';
-import AikidoUserQuerierId from '../../aikido.users/application/aikido.users.querier.id';
-import AikidoUserSearcher from '../../aikido.users/application/aikido.users.searcher';
-import AikidoUserUpdater from '../../aikido.users/application/aikido.users.updater';
-import AikidoUserMongoRepo from '../../aikido.users/infrastructure/aikido.users.mongo.repo';
-import { AikidoUsersController } from '../../server/application/controllers/aikido.users.controllers';
-import { TechsController } from '../../server/application/controllers/techs.controllers';
-import TechCreator from '../../techniques/application/techs.creator';
-import TechEraser from '../../techniques/application/techs.eraser';
-import TechQuerier from '../../techniques/application/techs.querier';
-import TechQuerierId from '../../techniques/application/techs.querier.id';
-import TechSearcher from '../../techniques/application/techs.searcher';
-import TechUpdater from '../../techniques/application/techs.updater';
-import TechMongoRepo from '../../techniques/infrastructure/techs.mongo.repo';
+import AikidoUserCreator from '../../aikido.users/application/aikido.users.creator.js';
+import AikidoUserEraser from '../../aikido.users/application/aikido.users.eraser.js';
+import AikidoUserQuerier from '../../aikido.users/application/aikido.users.querier.js';
+import AikidoUserQuerierId from '../../aikido.users/application/aikido.users.querier.id.js';
+import AikidoUserSearcher from '../../aikido.users/application/aikido.users.searcher.js';
+import AikidoUserUpdater from '../../aikido.users/application/aikido.users.updater.js';
+import AikidoUserMongoRepo from '../../aikido.users/infrastructure/aikido.users.mongo.repo.js';
+import { AikidoUsersController } from '../../server/application/controllers/aikido.users.controllers.js';
+import { DefaultController } from '../../server/application/controllers/default.controller.js';
+import { TechsController } from '../../server/application/controllers/techs.controllers.js';
+import TechCreator from '../../techniques/application/techs.creator.js';
+import TechEraser from '../../techniques/application/techs.eraser.js';
+import TechQuerier from '../../techniques/application/techs.querier.js';
+import TechQuerierId from '../../techniques/application/techs.querier.id.js';
+import TechSearcher from '../../techniques/application/techs.searcher.js';
+import TechUpdater from '../../techniques/application/techs.updater.js';
+import TechMongoRepo from '../../techniques/infrastructure/techs.mongo.repo.js';
 
 export const count = 'TestPass';
 
@@ -67,6 +68,8 @@ export const mockTechsController = new TechsController(
   mockTechUpdater,
   mockTechEraser
 );
+
+export const mockDefaultController = new DefaultController();
 
 export const mockReq = {
   body: {

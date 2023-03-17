@@ -18,6 +18,8 @@ import TechUpdater from './techniques/application/techs.updater.js';
 import TechEraser from './techniques/application/techs.eraser.js';
 import TechMongoRepo from './techniques/infrastructure/techs.mongo.repo.js';
 import TechRouter from './server/infrastructure/routers/techs.router.js';
+import DefaultRouter from './server/infrastructure/routers/default.router.js';
+import { DefaultController } from './server/application/controllers/default.controller.js';
 
 const bootstrap = async () => {
   const aikidoUsersRepository = new AikidoUserMongoRepo();
@@ -56,10 +58,17 @@ const bootstrap = async () => {
     techEraser
   );
 
+  const defaultController = new DefaultController();
+
   const aikidoUserRouter = new AikidoUserRouter(aikidoUserController);
   const techRouter = new TechRouter(techsController);
+  const defaultRouter = new DefaultRouter(defaultController);
 
-  const server = new ExpressServer([aikidoUserRouter, techRouter]);
+  const server = new ExpressServer([
+    aikidoUserRouter,
+    techRouter,
+    defaultRouter,
+  ]);
 
   server.start(PORT);
 };

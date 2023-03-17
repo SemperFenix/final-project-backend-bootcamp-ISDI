@@ -25,6 +25,7 @@ export default class ExpressServer {
     this.app.use(express.json());
     this.app.use(morgan('dev'));
     this.app.use(cors({ origin: '*' }));
+    this.app.use(express.static('src/common/public'));
     this.app.use(errorMiddleware);
   }
 

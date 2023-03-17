@@ -7,8 +7,8 @@ import {
   mockNoPassReq,
   mockReq,
   mockRes,
-} from '../../../common/mocks/test.mocks';
-import { Auth } from '../../../services/auth';
+} from '../../../common/mocks/test.mocks.js';
+import { Auth } from '../../../services/auth.js';
 
 jest.mock('../../../../src/config.js', () => ({
   config: {

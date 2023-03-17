@@ -54,8 +54,10 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
 
   async searchPaged(
     queries: { key: string; value: unknown }[],
-    page: number
+    page: string
   ): Promise<{ members: AikidoUser[]; number: number }> {
+    if (Number(page) < 1) page = '1';
+    const skipNumber = page === '1' ? 0 : Number(page) * 3;
     const protoQuery = queries.map((item) => ({ [item.key]: item.value }));
     const myQueries = protoQuery.reduce((obj, item) => ({ ...obj, ...item }));
     const number = await AikidoUserModel.find({ ...myQueries })
@@ -63,7 +65,7 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
       .exec();
 
     const members = await AikidoUserModel.find({ ...myQueries })
-      .skip(page)
+      .skip(number <= 3 ? 0 : skipNumber)
       .limit(3)
       .populate('techsLearnt')
       .populate('techsInProgress')

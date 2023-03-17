@@ -14,7 +14,7 @@ describe('Given the AikidoUserSearcherPaged class', () => {
             value: 'TestVal',
           },
         ],
-        0
+        '0'
       );
       expect(mockAikidoUserRepo.searchPaged).toHaveBeenCalledWith(
         [
@@ -23,7 +23,7 @@ describe('Given the AikidoUserSearcherPaged class', () => {
             value: 'TestVal',
           },
         ],
-        0
+        '0'
       );
     });
   });

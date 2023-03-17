@@ -129,7 +129,7 @@ describe('Given the AikidoUsersRepo', () => {
             { key: 'Test', value: 'testing' },
             { key: 'Test2', value: 'testing2' },
           ],
-          '2'
+          '1'
         );
         expect(result).toEqual({ members: [{}], number: 5 });
       });

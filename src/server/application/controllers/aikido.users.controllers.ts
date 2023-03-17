@@ -9,6 +9,7 @@ import AikidoUserSearcher from '../../../aikido.users/application/aikido.users.s
 import AikidoUserUpdater from '../../../aikido.users/application/aikido.users.updater.js';
 import { HTTPError } from '../../../common/errors/http.error.js';
 import { Auth, TokenPayload } from '../../../services/auth.js';
+import { CustomRequest } from '../../infrastructure/middleware/interceptors.middleware.js';
 
 const debug = createDebug('AiJo:AiUsController');
 
@@ -71,4 +72,6 @@ export class AikidoUsersController {
       next(error);
     }
   }
+
+  async getAll(req: CustomRequest, res: Response, next: NextFunction) {}
 }

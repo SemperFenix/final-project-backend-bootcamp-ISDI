@@ -20,6 +20,7 @@ import TechMongoRepo from './techniques/infrastructure/techs.mongo.repo.js';
 import TechRouter from './server/infrastructure/routers/techs.router.js';
 import DefaultRouter from './server/infrastructure/routers/default.router.js';
 import { DefaultController } from './server/application/controllers/default.controller.js';
+import AikidoUserSearcherPaged from './aikido.users/application/aikido.users.searcherPaged.js';
 
 const bootstrap = async () => {
   const aikidoUsersRepository = new AikidoUserMongoRepo();
@@ -30,6 +31,9 @@ const bootstrap = async () => {
   const aikidoUserCreator = new AikidoUserCreator(aikidoUsersRepository);
   const aikidoUserUpdater = new AikidoUserUpdater(aikidoUsersRepository);
   const aikidoUserEraser = new AikidoUserEraser(aikidoUsersRepository);
+  const aikidoUserSearcherPaged = new AikidoUserSearcherPaged(
+    aikidoUsersRepository
+  );
 
   const aikidoUserController = new AikidoUserController(
     aikidoUserSearcher,
@@ -37,7 +41,8 @@ const bootstrap = async () => {
     aikidoUserQuerierId,
     aikidoUserCreator,
     aikidoUserUpdater,
-    aikidoUserEraser
+    aikidoUserEraser,
+    aikidoUserSearcherPaged
   );
 
   const techsRepository = new TechMongoRepo();

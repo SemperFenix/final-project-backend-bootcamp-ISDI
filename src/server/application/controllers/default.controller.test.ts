@@ -18,8 +18,8 @@ describe('Given the DefaultController class', () => {
 
   describe('When call the register method', () => {
     describe('And all params are correct', () => {
-      test('Then it should call res.json', async () => {
-        await mockDefaultController.default(mockReq, mockRes, mockNext);
+      test('Then it should call res.json', () => {
+        mockDefaultController.default(mockReq, mockRes, mockNext);
         expect(mockRes.json).toHaveBeenCalled();
       });
     });

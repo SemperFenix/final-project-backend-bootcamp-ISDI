@@ -79,7 +79,11 @@ describe('Given the AikidoUsersRepo', () => {
   describe('When called the searchPaged method', () => {
     test('Then it should return the AikidoUsers array', async () => {
       popValue = [{}];
-      (AikidoUserModel.find as jest.Mock).mockImplementation(mockLimit);
+      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(() => ({
+        count: jest.fn().mockResolvedValue(0),
+      }));
+
+      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
       const result = await repo.searchPaged(
         [
           { key: 'Test', value: 'testing' },
@@ -87,7 +91,7 @@ describe('Given the AikidoUsersRepo', () => {
         ],
         0
       );
-      expect(result).toEqual([{}]);
+      expect(result).toEqual({ members: [{}], number: 0 });
     });
   });
 

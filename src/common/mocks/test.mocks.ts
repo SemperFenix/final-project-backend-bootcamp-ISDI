@@ -16,6 +16,7 @@ import TechQuerierId from '../../techniques/application/techs.querier.id.js';
 import TechSearcher from '../../techniques/application/techs.searcher.js';
 import TechUpdater from '../../techniques/application/techs.updater.js';
 import TechMongoRepo from '../../techniques/infrastructure/techs.mongo.repo.js';
+import AikidoUserSearcherPaged from '../../aikido.users/application/aikido.users.searcherPaged.js';
 
 export const count = 'TestPass';
 
@@ -33,6 +34,7 @@ export const mockAikidoUserRepo: AikidoUserMongoRepo = {
   queryById: jest.fn(),
   create: jest.fn(),
   search: jest.fn(),
+  searchPaged: jest.fn(),
   update: jest.fn(),
   erase: jest.fn(),
 };
@@ -43,6 +45,9 @@ export const mockQuerierId = new AikidoUserQuerierId(mockAikidoUserRepo);
 export const mockCreator = new AikidoUserCreator(mockAikidoUserRepo);
 export const mockUpdater = new AikidoUserUpdater(mockAikidoUserRepo);
 export const mockEraser = new AikidoUserEraser(mockAikidoUserRepo);
+export const mockSearcherPaged = new AikidoUserSearcherPaged(
+  mockAikidoUserRepo
+);
 
 export const mockAikidoUsersController = new AikidoUsersController(
   mockSearcher,
@@ -50,7 +55,8 @@ export const mockAikidoUsersController = new AikidoUsersController(
   mockQuerierId,
   mockCreator,
   mockUpdater,
-  mockEraser
+  mockEraser,
+  mockSearcherPaged
 );
 
 export const mockTechSearcher = new TechSearcher(mockTechRepo);

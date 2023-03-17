@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from 'express';
 
 import createDebugger from 'debug';
-import { Auth, TokenPayload } from '../../../services/auth';
-import { HTTPError } from '../../../common/errors/http.error';
+import { Auth, TokenPayload } from '../../../services/auth.js';
+import { HTTPError } from '../../../common/errors/http.error.js';
 
 const debug = createDebugger('AiJo:Interceptors');
 

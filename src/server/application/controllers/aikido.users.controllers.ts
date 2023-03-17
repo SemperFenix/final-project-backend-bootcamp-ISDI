@@ -10,6 +10,7 @@ import AikidoUserUpdater from '../../../aikido.users/application/aikido.users.up
 import { HTTPError } from '../../../common/errors/http.error.js';
 import { Auth, TokenPayload } from '../../../services/auth.js';
 import { CustomRequest } from '../../infrastructure/middleware/interceptors.middleware.js';
+import AikidoUserSearcherPaged from '../../../aikido.users/application/aikido.users.searcherPaged.js';
 
 const debug = createDebug('AiJo:AiUsController');
 
@@ -21,7 +22,8 @@ export class AikidoUsersController {
     private aikidoUserQuerierId: AikidoUserQuerierId,
     private aikidoUserCreator: AikidoUserCreator,
     private aikidoUserUpdater: AikidoUserUpdater,
-    private aikidoUserEraser: AikidoUserEraser
+    private aikidoUserEraser: AikidoUserEraser,
+    private aikidoUserSearcherPaged: AikidoUserSearcherPaged
   ) {
     debug('AikidoUsers controller instantiated...');
   }
@@ -73,5 +75,28 @@ export class AikidoUsersController {
     }
   }
 
-  async getAll(req: CustomRequest, res: Response, next: NextFunction) {}
+  async getCategorized(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      if (!req.body.page)
+        throw new HTTPError(400, 'Bad request', 'No page provided');
+
+      const senseis = await this.aikidoUserSearcherPaged.execute(
+        [{ key: 'role', value: 'sensei' }],
+        req.body.page
+      );
+
+      const students = await this.aikidoUserSearcherPaged.execute(
+        [{ key: 'role', value: 'user' }],
+        req.body.page
+      );
+      res.json({
+        results: [
+          { senseis: senseis.members, number: senseis.number },
+          { students: students.members, number: students.number },
+        ],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
 import createDebug from 'debug';
-import TechRepo from '../domain/tech.repo';
+import TechRepo from '../domain/tech.repo.js';
 
 const debug = createDebug('AiJo:TechUC_Eraser');
 

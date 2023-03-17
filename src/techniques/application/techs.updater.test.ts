@@ -1,6 +1,6 @@
-import { mockTechRepo } from '../../common/mocks/test.mocks';
-import { Tech } from '../domain/tech';
-import TechUpdater from './techs.updater';
+import { mockTechRepo } from '../../common/mocks/test.mocks.js';
+import { Tech } from '../domain/tech.js';
+import TechUpdater from './techs.updater.js';
 
 describe('Given the TechUpdater class', () => {
   describe('When call its execute method', () => {

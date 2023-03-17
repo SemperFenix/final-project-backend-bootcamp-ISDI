@@ -1,3 +1,4 @@
+import { HTTPError } from '../../../common/errors/http.error.js';
 import {
   mockAikidoUsersController,
   count,
@@ -7,6 +8,8 @@ import {
   mockNoPassReq,
   mockReq,
   mockRes,
+  mockCustomReq,
+  mockNoPageReq,
 } from '../../../common/mocks/test.mocks.js';
 import { Auth } from '../../../services/auth.js';
 
@@ -30,7 +33,9 @@ describe('Given the AikidoUsersController class', () => {
           name: 'TestOk',
         });
         await mockAikidoUsersController.register(mockReq, mockRes, mockNext);
-        expect(mockRes.json).toHaveBeenCalled();
+        expect(mockRes.json).toHaveBeenCalledWith({
+          results: [{ name: 'TestOk' }],
+        });
       });
     });
 
@@ -41,7 +46,13 @@ describe('Given the AikidoUsersController class', () => {
           mockRes,
           mockNext
         );
-        expect(mockNext).toHaveBeenCalled();
+        const error = new HTTPError(
+          401,
+          'Unathorized',
+          'No email or pass provided'
+        );
+
+        expect(mockNext).toHaveBeenCalledWith(error);
       });
     });
 
@@ -52,7 +63,12 @@ describe('Given the AikidoUsersController class', () => {
           mockRes,
           mockNext
         );
-        expect(mockNext).toHaveBeenCalled();
+        const error = new HTTPError(
+          401,
+          'Unathorized',
+          'No email or pass provided'
+        );
+        expect(mockNext).toHaveBeenCalledWith(error);
       });
     });
   });
@@ -62,9 +78,15 @@ describe('Given the AikidoUsersController class', () => {
       test('Then it should call res.json', async () => {
         mockReq.body.password = count;
         (Auth.compareHash as jest.Mock).mockResolvedValueOnce(true);
-        (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
+        (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce([
+          'Test',
+        ]);
+        (Auth.createToken as jest.Mock).mockReturnValue('TestToken');
+
         await mockAikidoUsersController.login(mockReq, mockRes, mockNext);
-        expect(mockRes.json).toHaveBeenCalled();
+        expect(mockRes.json).toHaveBeenCalledWith({
+          results: [{ token: 'TestToken' }],
+        });
       });
     });
 
@@ -75,14 +97,25 @@ describe('Given the AikidoUsersController class', () => {
           mockRes,
           mockNext
         );
-        expect(mockNext).toHaveBeenCalled();
+        const error = new HTTPError(
+          401,
+          'Unauthorized',
+          'Invalid email or password'
+        );
+
+        expect(mockNext).toHaveBeenCalledWith(error);
       });
     });
 
     describe('And there is no password in body', () => {
       test('Then it should call next', async () => {
         await mockAikidoUsersController.login(mockNoPassReq, mockRes, mockNext);
-        expect(mockNext).toHaveBeenCalled();
+        const error = new HTTPError(
+          401,
+          'Unauthorized',
+          'Invalid email or password'
+        );
+        expect(mockNext).toHaveBeenCalledWith(error);
       });
     });
     describe('And there is no user with the id', () => {
@@ -90,16 +123,71 @@ describe('Given the AikidoUsersController class', () => {
         (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(
           undefined
         );
-
+        const error = new HTTPError(
+          401,
+          'Unauthorized',
+          'Invalid email or password'
+        );
         await mockAikidoUsersController.login(mockReq, mockRes, mockNext);
-        expect(mockNext).toHaveBeenCalled();
+        expect(mockNext).toHaveBeenCalledWith(error);
       });
     });
     describe('And the password not matches', () => {
       test('Then it should call next', async () => {
         (Auth.compareHash as jest.Mock).mockResolvedValueOnce(false);
         (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(['a']);
+        const error = new HTTPError(401, 'Unauthorized', 'Password not match');
+
         await mockAikidoUsersController.login(mockReq, mockRes, mockNext);
+        expect(mockNext).toHaveBeenCalledWith(error);
+      });
+    });
+  });
+
+  describe('When call the getCategorized method', () => {
+    describe('And all params are correct', () => {
+      test('Then it should call res.json', async () => {
+        (mockAikidoUserRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
+          members: [{}],
+          number: 0,
+        });
+        (mockAikidoUserRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
+          members: [{}],
+          number: 0,
+        });
+        await mockAikidoUsersController.getCategorized(
+          mockCustomReq,
+          mockRes,
+          mockNext
+        );
+        expect(mockRes.json).toHaveBeenCalledWith({
+          results: [
+            { senseis: [{}], number: 0 },
+            { students: [{}], number: 0 },
+          ],
+        });
+      });
+    });
+
+    describe('And there is no page in body', () => {
+      test('Then it should call next', async () => {
+        await mockAikidoUsersController.getCategorized(
+          mockNoPageReq,
+          mockRes,
+          mockNext
+        );
+        const error = new HTTPError(400, 'Bad request', 'No page provided');
+        expect(mockNext).toHaveBeenCalledWith(error);
+      });
+    });
+
+    describe('And there is no password in body', () => {
+      test('Then it should call next', async () => {
+        await mockAikidoUsersController.getCategorized(
+          mockNoPassReq,
+          mockRes,
+          mockNext
+        );
         expect(mockNext).toHaveBeenCalled();
       });
     });

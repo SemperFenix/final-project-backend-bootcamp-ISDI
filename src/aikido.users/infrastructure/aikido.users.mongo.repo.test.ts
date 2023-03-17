@@ -36,6 +36,22 @@ const mockExec = () => ({
   exec: jest.fn().mockResolvedValue(popValue),
 });
 
+const arrangeSearch = async (page: string) => {
+  popValue = [{}];
+  popValue = [{}];
+  (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
+
+  (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
+  const result = await repo.searchPaged(
+    [
+      { key: 'Test', value: 'testing' },
+      { key: 'Test2', value: 'testing2' },
+    ],
+    page
+  );
+  return result;
+};
+
 describe('Given the AikidoUsersRepo', () => {
   describe('When call the Query method', () => {
     test('Then it should return the AikidoUsers array', async () => {
@@ -84,34 +100,15 @@ describe('Given the AikidoUsersRepo', () => {
 
   describe('When called the searchPaged method with page 0', () => {
     test('Then it should return the AikidoUsers array with page 1', async () => {
-      popValue = [{}];
-      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
-
-      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
-      const result = await repo.searchPaged(
-        [
-          { key: 'Test', value: 'testing' },
-          { key: 'Test2', value: 'testing2' },
-        ],
-        '0'
-      );
+      const result = await arrangeSearch('0');
       expect(result).toEqual({ members: [{}], number: 0 });
     });
   });
 
   describe('When called the searchPaged method with page 2', () => {
     test('Then it should return the AikidoUsers array skipping the first 6', async () => {
-      popValue = [{}];
-      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
+      const result = await arrangeSearch('2');
 
-      (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);
-      const result = await repo.searchPaged(
-        [
-          { key: 'Test', value: 'testing' },
-          { key: 'Test2', value: 'testing2' },
-        ],
-        '2'
-      );
       expect(result).toEqual({ members: [{}], number: 0 });
     });
   });

@@ -1,5 +1,5 @@
-import { mockTechsController } from '../../../common/mocks/test.mocks';
-import TechRouter from './techs.router';
+import { mockTechsController } from '../../../common/mocks/test.mocks.js';
+import TechRouter from './techs.router.js';
 
 describe('Given the TechsRouter', () => {
   describe('When instantiated', () => {

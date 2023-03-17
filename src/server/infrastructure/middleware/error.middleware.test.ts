@@ -1,6 +1,10 @@
-import { CustomError } from '../../../common/errors/http.error';
-import { mockNext, mockReq, mockRes } from '../../../common/mocks/test.mocks';
-import { errorMiddleware } from './error.middleware';
+import { CustomError } from '../../../common/errors/http.error.js';
+import {
+  mockNext,
+  mockReq,
+  mockRes,
+} from '../../../common/mocks/test.mocks.js';
+import { errorMiddleware } from './error.middleware.js';
 
 describe('Given the errorMidleware function', () => {
   describe('When called with all values in custom Error', () => {

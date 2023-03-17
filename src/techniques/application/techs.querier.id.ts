@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
 
 import createDebug from 'debug';
-import { Tech } from '../domain/tech';
-import TechRepo from '../domain/tech.repo';
+import { Tech } from '../domain/tech.js';
+import TechRepo from '../domain/tech.repo.js';
 
 const debug = createDebug('AiJo:TechUC_QuerierId');
 

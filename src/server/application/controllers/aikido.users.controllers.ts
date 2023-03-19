@@ -75,24 +75,55 @@ export class AikidoUsersController {
     }
   }
 
-  async getCategorized(req: CustomRequest, res: Response, next: NextFunction) {
+  async getSenseisCategorized(
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    // eslint-disable-next-line no-debugger
+    debugger;
     try {
-      if (!req.body.page)
-        throw new HTTPError(400, 'Bad request', 'No page provided');
+      const { page } = req.query;
+      if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
 
       const senseis = await this.aikidoUserSearcherPaged.execute(
         [{ key: 'role', value: 'sensei' }],
-        req.body.page
+        page as string
       );
+
+      res.json({
+        results: [
+          {
+            users: senseis.members,
+            number: senseis.number,
+          },
+        ],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async getStudentsCategorized(
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) {
+    try {
+      const { page } = req.query;
+
+      if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
 
       const students = await this.aikidoUserSearcherPaged.execute(
         [{ key: 'role', value: 'user' }],
-        req.body.page
+        page as string
       );
       res.json({
         results: [
-          { senseis: senseis.members, number: senseis.number },
-          { students: students.members, number: students.number },
+          {
+            users: students.members,
+            number: students.number,
+          },
         ],
       });
     } catch (error) {

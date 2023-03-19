@@ -155,7 +155,7 @@ describe('Given the AikidoUsersController class', () => {
           members: [{}],
           number: 0,
         });
-        await mockAikidoUsersController.getCategorized(
+        await mockAikidoUsersController.getSenseisCategorized(
           mockCustomReq,
           mockRes,
           mockNext
@@ -171,7 +171,7 @@ describe('Given the AikidoUsersController class', () => {
 
     describe('And there is no page in body', () => {
       test('Then it should call next', async () => {
-        await mockAikidoUsersController.getCategorized(
+        await mockAikidoUsersController.getSenseisCategorized(
           mockNoPageReq,
           mockRes,
           mockNext
@@ -183,7 +183,7 @@ describe('Given the AikidoUsersController class', () => {
 
     describe('And there is no password in body', () => {
       test('Then it should call next', async () => {
-        await mockAikidoUsersController.getCategorized(
+        await mockAikidoUsersController.getSenseisCategorized(
           mockNoPassReq,
           mockRes,
           mockNext

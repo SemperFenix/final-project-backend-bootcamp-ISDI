@@ -144,32 +144,26 @@ describe('Given the AikidoUsersController class', () => {
     });
   });
 
-  describe('When call the getCategorized method', () => {
+  describe('When call the getSenseisCategorized method', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
         (mockAikidoUserRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
           members: [{}],
           number: 0,
         });
-        (mockAikidoUserRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
-          members: [{}],
-          number: 0,
-        });
+
         await mockAikidoUsersController.getSenseisCategorized(
           mockCustomReq,
           mockRes,
           mockNext
         );
         expect(mockRes.json).toHaveBeenCalledWith({
-          results: [
-            { senseis: [{}], number: 0 },
-            { students: [{}], number: 0 },
-          ],
+          results: [{ users: [{}], number: 0 }],
         });
       });
     });
 
-    describe('And there is no page in body', () => {
+    describe('And there is no page in query', () => {
       test('Then it should call next', async () => {
         await mockAikidoUsersController.getSenseisCategorized(
           mockNoPageReq,
@@ -184,6 +178,49 @@ describe('Given the AikidoUsersController class', () => {
     describe('And there is no password in body', () => {
       test('Then it should call next', async () => {
         await mockAikidoUsersController.getSenseisCategorized(
+          mockNoPassReq,
+          mockRes,
+          mockNext
+        );
+        expect(mockNext).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('When call the getStudentsCategorized method', () => {
+    describe('And all params are correct', () => {
+      test('Then it should call res.json', async () => {
+        (mockAikidoUserRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
+          members: [{}],
+          number: 0,
+        });
+
+        await mockAikidoUsersController.getStudentsCategorized(
+          mockCustomReq,
+          mockRes,
+          mockNext
+        );
+        expect(mockRes.json).toHaveBeenCalledWith({
+          results: [{ users: [{}], number: 0 }],
+        });
+      });
+    });
+
+    describe('And there is no page in query', () => {
+      test('Then it should call next', async () => {
+        await mockAikidoUsersController.getStudentsCategorized(
+          mockNoPageReq,
+          mockRes,
+          mockNext
+        );
+        const error = new HTTPError(400, 'Bad request', 'No page provided');
+        expect(mockNext).toHaveBeenCalledWith(error);
+      });
+    });
+
+    describe('And there is no password in body', () => {
+      test('Then it should call next', async () => {
+        await mockAikidoUsersController.getStudentsCategorized(
           mockNoPassReq,
           mockRes,
           mockNext

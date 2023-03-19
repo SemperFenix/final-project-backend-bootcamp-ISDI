@@ -86,6 +86,9 @@ export const mockReq = {
     lastName: 'TestLast',
     grade: '2º kyu',
   },
+  query: {
+    page: '1',
+  },
 } as unknown as Request;
 
 export const mockCustomReq = {
@@ -96,10 +99,12 @@ export const mockCustomReq = {
     name: 'TestName',
     lastName: 'TestLast',
     grade: '2º kyu',
-    page: '1',
   },
   credentials: {
     role: 'user',
+  },
+  query: {
+    page: '1',
   },
 } as unknown as Request;
 
@@ -115,6 +120,7 @@ export const mockNoPageReq = {
     password: count,
     name: 'TestName',
   },
+  query: {},
 } as unknown as Request;
 
 export const mockNoPassReq = {

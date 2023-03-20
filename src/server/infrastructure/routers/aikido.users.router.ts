@@ -40,7 +40,7 @@ export default class AikidoUserRouter implements ServerRouter {
     this.router.get(
       '/users/:id',
       Interceptors.logged,
-      this.aikidoUsersControllers.getUser.bind(this.aikidoUsersControllers)
+      this.aikidoUsersControllers.getUserById.bind(this.aikidoUsersControllers)
     );
   }
 }

@@ -131,7 +131,7 @@ export class AikidoUsersController {
     }
   }
 
-  async getUser(req: CustomRequest, res: Response, next: NextFunction) {
+  async getUserById(req: CustomRequest, res: Response, next: NextFunction) {
     try {
       const { id } = req.params;
 

@@ -236,7 +236,7 @@ describe('Given the AikidoUsersController class', () => {
       test('Then it should call res.json', async () => {
         (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce({});
 
-        await mockAikidoUsersController.getUser(
+        await mockAikidoUsersController.getUserById(
           mockCustomReq,
           mockRes,
           mockNext
@@ -249,7 +249,11 @@ describe('Given the AikidoUsersController class', () => {
 
     describe('And there is no id in the body', () => {
       test('Then it should call next', async () => {
-        await mockAikidoUsersController.getUser(mockReqNoId, mockRes, mockNext);
+        await mockAikidoUsersController.getUserById(
+          mockReqNoId,
+          mockRes,
+          mockNext
+        );
         const error = new HTTPError(400, 'Bad request', 'No user provided');
         expect(mockNext).toHaveBeenCalledWith(error);
       });

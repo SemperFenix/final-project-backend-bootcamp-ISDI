@@ -145,4 +145,106 @@ export class AikidoUsersController {
       next(error);
     }
   }
+
+  async updateSelfUser(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      // Un usuario normal no puede editar algunos de sus campos, por lo que, incluso si los manda, los elimino para que no los pase al updater
+
+      delete req.body.grade;
+      delete req.body.techsLearnt;
+      delete req.body.mainUke;
+
+      const user = await this.aikidoUserUpdater.execute(req.body);
+      res.json({
+        results: [user],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async updateAdmin(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      const user = req.body;
+
+      const userToUpdate = await this.aikidoUserQuerierId.execute(user.id);
+
+      userToUpdate.techsLearnt.push(req.body.tech);
+      userToUpdate.techsInProgress = userToUpdate.techsInProgress.filter(
+        (item) => item !== req.body.tech.id
+      );
+
+      const updatedUser = await this.aikidoUserUpdater.execute(req.body);
+      res.json({
+        results: [updatedUser],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async deleteUser(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      await this.aikidoUserEraser.execute(id);
+      res.json({
+        results: [{}],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addUke(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      const user = await this.aikidoUserQuerierId.execute(id);
+      if (!req.body.id)
+        throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      const ukeToAdd = await this.aikidoUserQuerierId.execute(req.body.id);
+
+      if (!ukeToAdd) throw new HTTPError(404, 'Not found', 'User not found');
+
+      user.mainUke = ukeToAdd;
+
+      const updatedUser = await this.aikidoUserUpdater.execute(user);
+      res.json({
+        results: [updatedUser],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removeUke(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+      if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      const user = await this.aikidoUserQuerierId.execute(id);
+
+      user.mainUke = undefined;
+
+      const updatedUser = await this.aikidoUserUpdater.execute(user);
+      res.json({
+        results: [updatedUser],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

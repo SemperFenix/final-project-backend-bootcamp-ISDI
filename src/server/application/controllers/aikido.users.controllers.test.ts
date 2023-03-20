@@ -10,6 +10,7 @@ import {
   mockRes,
   mockCustomReq,
   mockNoPageReq,
+  mockReqNoId,
 } from '../../../common/mocks/test.mocks.js';
 import { Auth } from '../../../services/auth.js';
 
@@ -226,6 +227,31 @@ describe('Given the AikidoUsersController class', () => {
           mockNext
         );
         expect(mockNext).toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe('When call the getUser method', () => {
+    describe('And all params are correct', () => {
+      test('Then it should call res.json', async () => {
+        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce({});
+
+        await mockAikidoUsersController.getUser(
+          mockCustomReq,
+          mockRes,
+          mockNext
+        );
+        expect(mockRes.json).toHaveBeenCalledWith({
+          results: [{}],
+        });
+      });
+    });
+
+    describe('And there is no id in the body', () => {
+      test('Then it should call next', async () => {
+        await mockAikidoUsersController.getUser(mockReqNoId, mockRes, mockNext);
+        const error = new HTTPError(400, 'Bad request', 'No user provided');
+        expect(mockNext).toHaveBeenCalledWith(error);
       });
     });
   });

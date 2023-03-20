@@ -103,6 +103,26 @@ export const mockCustomReq = {
   credentials: {
     role: 'user',
   },
+  params: {
+    id: 'TestId',
+  },
+  query: {
+    page: '1',
+  },
+} as unknown as Request;
+
+export const mockReqNoId = {
+  body: {
+    email: 'TestMail',
+    password: count,
+    name: 'TestName',
+    lastName: 'TestLast',
+    grade: '2º kyu',
+  },
+  params: {},
+  credentials: {
+    role: 'user',
+  },
   query: {
     page: '1',
   },

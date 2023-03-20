@@ -130,4 +130,19 @@ export class AikidoUsersController {
       next(error);
     }
   }
+
+  async getUserById(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const { id } = req.params;
+
+      if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      const user = await this.aikidoUserQuerierId.execute(id);
+      res.json({
+        results: [user],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }

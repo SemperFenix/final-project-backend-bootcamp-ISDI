@@ -57,7 +57,7 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
     page: string
   ): Promise<{ members: AikidoUser[]; number: number }> {
     if (Number(page) < 1) page = '1';
-    const skipNumber = page === '1' ? 0 : Number(page) * 3;
+    const skipNumber = page === '1' ? 0 : (Number(page) - 1) * 3;
     const protoQuery = queries.map((item) => ({ [item.key]: item.value }));
     const myQueries = protoQuery.reduce((obj, item) => ({ ...obj, ...item }));
     const number = await AikidoUserModel.find({ ...myQueries })

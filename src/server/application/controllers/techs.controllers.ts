@@ -30,4 +30,12 @@ export class TechsController {
     res.status(201);
     res.json({ results: [newTech] });
   }
+
+  async queryById(req: Request, res: Response, _next: NextFunction) {
+    const { id } = req.params;
+    const tech = await this.techQuerierId.execute(id);
+    debug('Tech found! =)');
+    res.status(200);
+    res.json({ results: [tech] });
+  }
 }

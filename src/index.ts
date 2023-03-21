@@ -20,7 +20,8 @@ import TechMongoRepo from './techniques/infrastructure/techs.mongo.repo.js';
 import TechRouter from './server/infrastructure/routers/techs.router.js';
 import DefaultRouter from './server/infrastructure/routers/default.router.js';
 import { DefaultController } from './server/application/controllers/default.controller.js';
-import AikidoUserSearcherPaged from './aikido.users/application/aikido.users.searcherPaged.js';
+import AikidoUserSearcherPaged from './aikido.users/application/aikido.users.searcher.paged.js';
+import TechSearcherPaged from './techniques/application/techs.searcher.paged.js';
 
 const bootstrap = async () => {
   const aikidoUsersRepository = new AikidoUserMongoRepo();
@@ -35,16 +36,6 @@ const bootstrap = async () => {
     aikidoUsersRepository
   );
 
-  const aikidoUserController = new AikidoUserController(
-    aikidoUserSearcher,
-    aikidoUserQuerier,
-    aikidoUserQuerierId,
-    aikidoUserCreator,
-    aikidoUserUpdater,
-    aikidoUserEraser,
-    aikidoUserSearcherPaged
-  );
-
   const techsRepository = new TechMongoRepo();
 
   const techSearcher = new TechSearcher(techsRepository);
@@ -53,6 +44,19 @@ const bootstrap = async () => {
   const techCreator = new TechCreator(techsRepository);
   const techUpdater = new TechUpdater(techsRepository);
   const techEraser = new TechEraser(techsRepository);
+  const techSearcherPaged = new TechSearcherPaged(techsRepository);
+
+  const aikidoUserController = new AikidoUserController(
+    aikidoUserSearcher,
+    aikidoUserQuerier,
+    aikidoUserQuerierId,
+    aikidoUserCreator,
+    aikidoUserUpdater,
+    aikidoUserEraser,
+    aikidoUserSearcherPaged,
+    techQuerierId,
+    techUpdater
+  );
 
   const techsController = new TechsController(
     techSearcher,
@@ -60,7 +64,8 @@ const bootstrap = async () => {
     techQuerierId,
     techCreator,
     techUpdater,
-    techEraser
+    techEraser,
+    techSearcherPaged
   );
 
   const defaultController = new DefaultController();

@@ -29,6 +29,14 @@ jest.mock('../../../../src/config.js', () => ({
 }));
 
 jest.mock('../../../services/auth.js');
+const arrangeTechs = () => {
+  (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
+    mockAikidoUser
+  );
+  (mockTechRepo.queryById as jest.Mock).mockResolvedValueOnce(mockTech);
+  (mockTechRepo.update as jest.Mock).mockResolvedValue(mockTech);
+  (mockAikidoUserRepo.update as jest.Mock).mockResolvedValueOnce({});
+};
 
 describe('Given the AikidoUsersController class', () => {
   afterEach(() => {
@@ -472,12 +480,7 @@ describe('Given the AikidoUsersController class', () => {
   describe('When call the addTech method', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
-          mockAikidoUser
-        );
-        (mockTechRepo.queryById as jest.Mock).mockResolvedValueOnce(mockTech);
-        (mockTechRepo.update as jest.Mock).mockResolvedValue(mockTech);
-        (mockAikidoUserRepo.update as jest.Mock).mockResolvedValueOnce({});
+        arrangeTechs();
 
         await mockAikidoUsersController.addTech(
           mockCustomReq,
@@ -555,12 +558,7 @@ describe('Given the AikidoUsersController class', () => {
   describe('When call the removeTech method', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
-          mockAikidoUser
-        );
-        (mockTechRepo.queryById as jest.Mock).mockResolvedValueOnce(mockTech);
-        (mockTechRepo.update as jest.Mock).mockResolvedValue(mockTech);
-        (mockAikidoUserRepo.update as jest.Mock).mockResolvedValueOnce({});
+        arrangeTechs();
 
         await mockAikidoUsersController.removeTech(
           mockCustomReq,

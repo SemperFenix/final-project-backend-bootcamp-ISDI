@@ -3,7 +3,6 @@
 
 import { Tech } from '../../techniques/domain/tech.js';
 import createDebug from 'debug';
-import { Types } from 'mongoose';
 
 const debug = createDebug('AiJo:AiUsClass');
 

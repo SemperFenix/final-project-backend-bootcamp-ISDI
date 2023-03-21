@@ -13,7 +13,6 @@ import { CustomRequest } from '../../infrastructure/middleware/interceptors.midd
 import AikidoUserSearcherPaged from '../../../aikido.users/application/aikido.users.searcher.paged.js';
 import TechUpdater from '../../../techniques/application/techs.updater.js';
 import TechQuerierId from '../../../techniques/application/techs.querier.id.js';
-import { Types, ObjectId } from 'mongoose';
 
 const debug = createDebug('AiJo:AiUsController');
 

@@ -24,9 +24,9 @@ export class Tech extends ProtoTech {
     public tech: string,
     public stand: string,
     public grade: Grades,
-    public usersLearnt: AikidoUser[],
-    public usersInProgress: AikidoUser[],
-    public usersToLearn: AikidoUser[],
+    public usersLearnt: AikidoUser['id'][],
+    public usersInProgress: AikidoUser['id'][],
+    public usersToLearn: AikidoUser['id'][],
     public video?: string
   ) {
     super(attack, tech, stand, grade, video);

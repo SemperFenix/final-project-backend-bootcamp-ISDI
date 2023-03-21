@@ -16,7 +16,8 @@ import TechQuerierId from '../../techniques/application/techs.querier.id.js';
 import TechSearcher from '../../techniques/application/techs.searcher.js';
 import TechUpdater from '../../techniques/application/techs.updater.js';
 import TechMongoRepo from '../../techniques/infrastructure/techs.mongo.repo.js';
-import AikidoUserSearcherPaged from '../../aikido.users/application/aikido.users.searcherPaged.js';
+import AikidoUserSearcherPaged from '../../aikido.users/application/aikido.users.searcher.paged.js';
+import TechSearcherPaged from '../../techniques/application/techs.searcher.paged.js';
 
 export const count = 'TestPass';
 
@@ -25,6 +26,7 @@ export const mockTechRepo: TechMongoRepo = {
   queryById: jest.fn(),
   create: jest.fn(),
   search: jest.fn(),
+  searchPaged: jest.fn(),
   update: jest.fn(),
   erase: jest.fn(),
 };
@@ -49,6 +51,14 @@ export const mockSearcherPaged = new AikidoUserSearcherPaged(
   mockAikidoUserRepo
 );
 
+export const mockTechSearcher = new TechSearcher(mockTechRepo);
+export const mockTechQuerier = new TechQuerier(mockTechRepo);
+export const mockTechQuerierId = new TechQuerierId(mockTechRepo);
+export const mockTechCreator = new TechCreator(mockTechRepo);
+export const mockTechUpdater = new TechUpdater(mockTechRepo);
+export const mockTechEraser = new TechEraser(mockTechRepo);
+export const mockTechSearcherPaged = new TechSearcherPaged(mockTechRepo);
+
 export const mockAikidoUsersController = new AikidoUsersController(
   mockSearcher,
   mockQuerier,
@@ -56,15 +66,10 @@ export const mockAikidoUsersController = new AikidoUsersController(
   mockCreator,
   mockUpdater,
   mockEraser,
-  mockSearcherPaged
+  mockSearcherPaged,
+  mockTechQuerierId,
+  mockTechUpdater
 );
-
-export const mockTechSearcher = new TechSearcher(mockTechRepo);
-export const mockTechQuerier = new TechQuerier(mockTechRepo);
-export const mockTechQuerierId = new TechQuerierId(mockTechRepo);
-export const mockTechCreator = new TechCreator(mockTechRepo);
-export const mockTechUpdater = new TechUpdater(mockTechRepo);
-export const mockTechEraser = new TechEraser(mockTechRepo);
 
 export const mockTechsController = new TechsController(
   mockTechSearcher,
@@ -72,7 +77,8 @@ export const mockTechsController = new TechsController(
   mockTechQuerierId,
   mockTechCreator,
   mockTechUpdater,
-  mockTechEraser
+  mockTechEraser,
+  mockTechSearcherPaged
 );
 
 export const mockDefaultController = new DefaultController();
@@ -86,6 +92,12 @@ export const mockReq = {
     lastName: 'TestLast',
     grade: '2º kyu',
   },
+  query: {
+    page: '1',
+  },
+} as unknown as Request;
+
+export const mockNoBodyReq = {
   query: {
     page: '1',
   },
@@ -108,10 +120,72 @@ export const mockCustomReq = {
   },
   query: {
     page: '1',
+    attack: 'test',
+    stand: 'test',
   },
 } as unknown as Request;
 
-export const mockReqNoId = {
+export const mockUserReq = {
+  body: {
+    id: 'TestId',
+    email: 'TestMail',
+    password: count,
+    name: 'TestName',
+    lastName: 'TestLast',
+    grade: '2º kyu',
+  },
+  credentials: {
+    role: 'user',
+  },
+  params: {
+    id: 'user',
+  },
+  query: {
+    page: '1',
+  },
+} as unknown as Request;
+
+export const mockUserNoPageReq = {
+  body: {
+    id: 'TestId',
+    email: 'TestMail',
+    password: count,
+    name: 'TestName',
+    lastName: 'TestLast',
+    grade: '2º kyu',
+  },
+  credentials: {
+    role: 'user',
+  },
+  params: {
+    id: 'user',
+  },
+  query: {
+    page: undefined,
+  },
+} as unknown as Request;
+
+export const mockSenseiReq = {
+  body: {
+    id: 'TestId',
+    email: 'TestMail',
+    password: count,
+    name: 'TestName',
+    lastName: 'TestLast',
+    grade: '2º kyu',
+  },
+  credentials: {
+    role: 'user',
+  },
+  params: {
+    id: 'sensei',
+  },
+  query: {
+    page: '1',
+  },
+} as unknown as Request;
+
+export const mockNoParamsReq = {
   body: {
     email: 'TestMail',
     password: count,
@@ -119,7 +193,7 @@ export const mockReqNoId = {
     lastName: 'TestLast',
     grade: '2º kyu',
   },
-  params: {},
+  params: { id: undefined },
   credentials: {
     role: 'user',
   },

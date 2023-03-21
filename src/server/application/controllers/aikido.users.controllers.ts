@@ -10,7 +10,10 @@ import AikidoUserUpdater from '../../../aikido.users/application/aikido.users.up
 import { HTTPError } from '../../../common/errors/http.error.js';
 import { Auth, TokenPayload } from '../../../services/auth.js';
 import { CustomRequest } from '../../infrastructure/middleware/interceptors.middleware.js';
-import AikidoUserSearcherPaged from '../../../aikido.users/application/aikido.users.searcherPaged.js';
+import AikidoUserSearcherPaged from '../../../aikido.users/application/aikido.users.searcher.paged.js';
+import TechUpdater from '../../../techniques/application/techs.updater.js';
+import TechQuerierId from '../../../techniques/application/techs.querier.id.js';
+import { Types, ObjectId } from 'mongoose';
 
 const debug = createDebug('AiJo:AiUsController');
 
@@ -23,7 +26,9 @@ export class AikidoUsersController {
     private aikidoUserCreator: AikidoUserCreator,
     private aikidoUserUpdater: AikidoUserUpdater,
     private aikidoUserEraser: AikidoUserEraser,
-    private aikidoUserSearcherPaged: AikidoUserSearcherPaged
+    private aikidoUserSearcherPaged: AikidoUserSearcherPaged,
+    private techQuerierId: TechQuerierId,
+    private techUpdater: TechUpdater
   ) {
     debug('AikidoUsers controller instantiated...');
   }
@@ -68,6 +73,7 @@ export class AikidoUsersController {
       };
       const token = Auth.createToken(tokenPayload);
       debug('Login successful! =D');
+      res.status(200);
       res.json({ results: [{ token }] });
     } catch (error) {
       debug('Login error =(');
@@ -75,54 +81,37 @@ export class AikidoUsersController {
     }
   }
 
-  async getSenseisCategorized(
-    req: CustomRequest,
-    res: Response,
-    next: NextFunction
-  ) {
-    // eslint-disable-next-line no-debugger
-    debugger;
-    try {
-      const { page } = req.query;
-      if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
-
-      const senseis = await this.aikidoUserSearcherPaged.execute(
-        [{ key: 'role', value: 'sensei' }],
-        page as string
-      );
-
-      res.json({
-        results: [
-          {
-            users: senseis.members,
-            number: senseis.number,
-          },
-        ],
-      });
-    } catch (error) {
-      next(error);
-    }
-  }
-
-  async getStudentsCategorized(
+  async getUsersCategorized(
     req: CustomRequest,
     res: Response,
     next: NextFunction
   ) {
     try {
-      const { page } = req.query;
+      const { id } = req.params;
+      debug(id);
 
+      if (!id) throw new HTTPError(400, 'No data provided', 'No role provided');
+
+      // Código refactorizable??
+      if (id !== 'user') {
+        if (id !== 'sensei') throw new HTTPError(406, 'Invalid data', id);
+      }
+
+      const { page } = req.query;
       if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
 
-      const students = await this.aikidoUserSearcherPaged.execute(
-        [{ key: 'role', value: 'user' }],
+      const users = await this.aikidoUserSearcherPaged.execute(
+        [{ key: 'role', value: id }],
         page as string
       );
+      debug('Users ready! =)');
+      res.status(202);
+
       res.json({
         results: [
           {
-            users: students.members,
-            number: students.number,
+            users: users.members,
+            number: users.number,
           },
         ],
       });
@@ -138,6 +127,9 @@ export class AikidoUsersController {
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
 
       const user = await this.aikidoUserQuerierId.execute(id);
+      debug('User found! =)');
+      res.status(200);
+
       res.json({
         results: [user],
       });
@@ -159,6 +151,9 @@ export class AikidoUsersController {
       delete req.body.mainUke;
 
       const user = await this.aikidoUserUpdater.execute(req.body);
+      debug('Updated!');
+      res.status(202);
+
       res.json({
         results: [user],
       });
@@ -183,6 +178,9 @@ export class AikidoUsersController {
       );
 
       const updatedUser = await this.aikidoUserUpdater.execute(req.body);
+      debug('Updated!');
+      res.status(202);
+
       res.json({
         results: [updatedUser],
       });
@@ -198,6 +196,9 @@ export class AikidoUsersController {
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
 
       await this.aikidoUserEraser.execute(id);
+      debug("'Bye, bye ='(");
+      res.status(202);
+
       res.json({
         results: [{}],
       });
@@ -210,8 +211,6 @@ export class AikidoUsersController {
     try {
       const { id } = req.params;
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
-
-      const user = await this.aikidoUserQuerierId.execute(id);
       if (!req.body.id)
         throw new HTTPError(400, 'Bad request', 'No user provided');
 
@@ -219,9 +218,19 @@ export class AikidoUsersController {
 
       if (!ukeToAdd) throw new HTTPError(404, 'Not found', 'User not found');
 
-      user.mainUke = ukeToAdd;
+      const user = await this.aikidoUserQuerierId.execute(id);
+      if (user.mainUke)
+        throw new HTTPError(
+          409,
+          "Can't be more than one uke",
+          'Field restricted to single value'
+        );
+
+      user.mainUke = ukeToAdd.id;
 
       const updatedUser = await this.aikidoUserUpdater.execute(user);
+      res.status(202);
+
       res.json({
         results: [updatedUser],
       });
@@ -240,6 +249,70 @@ export class AikidoUsersController {
       user.mainUke = undefined;
 
       const updatedUser = await this.aikidoUserUpdater.execute(user);
+      res.status(202);
+
+      res.json({
+        results: [updatedUser],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async addTech(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const userId = req.params.id;
+      const techId = req.body.tech;
+      if (!userId) throw new HTTPError(400, 'Bad request', 'No user provided');
+      if (!techId) throw new HTTPError(400, 'Bad request', 'No tech provided');
+
+      const user = await this.aikidoUserQuerierId.execute(userId);
+      const tech = await this.techQuerierId.execute(
+        techId as unknown as string
+      );
+
+      user.techsInProgress.push(techId);
+      tech.usersInProgress.push(userId);
+      await this.techUpdater.execute(tech);
+
+      const updatedUser = await this.aikidoUserUpdater.execute(user);
+      res.status(202);
+
+      res.json({
+        results: [updatedUser],
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async removeTech(req: CustomRequest, res: Response, next: NextFunction) {
+    try {
+      const userId = req.params.id;
+      const techId = req.body.tech;
+      if (!userId) throw new HTTPError(400, 'Bad request', 'No user provided');
+      if (!techId) throw new HTTPError(400, 'Bad request', 'No tech provided');
+
+      const user = await this.aikidoUserQuerierId.execute(userId);
+      if (!user) throw new HTTPError(404, 'Not found', 'User not found');
+
+      const tech = await this.techQuerierId.execute(
+        techId as unknown as string
+      );
+      if (!tech) throw new HTTPError(404, 'Not found', 'Tech not found');
+
+      user.techsInProgress = user.techsInProgress.filter(
+        (tech) => tech !== techId
+      );
+
+      tech.usersInProgress = tech.usersInProgress.filter(
+        (tech) => tech !== userId
+      );
+
+      await this.techUpdater.execute(tech);
+
+      const updatedUser = await this.aikidoUserUpdater.execute(user);
+      res.status(202);
       res.json({
         results: [updatedUser],
       });

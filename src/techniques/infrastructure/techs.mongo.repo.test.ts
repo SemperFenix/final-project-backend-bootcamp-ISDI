@@ -16,9 +16,38 @@ const mockTechPopulExec = () => ({
   })),
 });
 
+const mockLimit = () => ({
+  skip: jest.fn().mockImplementation(() => ({
+    limit: jest.fn().mockImplementation(mockTechPopulExec),
+  })),
+});
+let count = 0;
+
+const mockCount = () => ({
+  count: jest
+    .fn()
+    .mockImplementation(() => ({ exec: jest.fn().mockResolvedValue(count) })),
+});
+
 const mockExec = () => ({
   exec: jest.fn().mockResolvedValue(popTechValue),
 });
+
+const arrangeSearch = async (page: string) => {
+  popTechValue = [{}];
+
+  (TechModel.find as jest.Mock).mockImplementationOnce(mockCount);
+
+  (TechModel.find as jest.Mock).mockImplementationOnce(mockLimit);
+  const result = await repo.searchPaged(
+    [
+      { key: 'Test', value: 'testing' },
+      { key: 'Test2', value: 'testing2' },
+    ],
+    page
+  );
+  return result;
+};
 
 describe('Given the TechsRepo', () => {
   describe('When call the Query method', () => {
@@ -59,6 +88,41 @@ describe('Given the TechsRepo', () => {
         { key: 'Test2', value: 'testing2' },
       ]);
       expect(result).toEqual([{}]);
+    });
+  });
+
+  describe('When called the searchPaged method with page 0', () => {
+    test('Then it should return the AikidoUsers array with page 1', async () => {
+      const result = await arrangeSearch('0');
+      expect(result).toEqual({ techs: [{}], number: 0 });
+    });
+  });
+
+  describe('When called the searchPaged method with page 2', () => {
+    test('Then it should return the AikidoUsers array skipping the first 6', async () => {
+      const result = await arrangeSearch('2');
+
+      expect(result).toEqual({ techs: [{}], number: 0 });
+    });
+  });
+
+  describe('When called the searchPaged method with page 1', () => {
+    describe('And there is more than 3 items', () => {
+      test('Then it should return the Techs array without skipping', async () => {
+        popTechValue = [{}];
+        count = 5;
+        (TechModel.find as jest.Mock).mockImplementationOnce(mockCount);
+
+        (TechModel.find as jest.Mock).mockImplementationOnce(mockLimit);
+        const result = await repo.searchPaged(
+          [
+            { key: 'Test', value: 'testing' },
+            { key: 'Test2', value: 'testing2' },
+          ],
+          '1'
+        );
+        expect(result).toEqual({ techs: [{}], number: 5 });
+      });
     });
   });
 

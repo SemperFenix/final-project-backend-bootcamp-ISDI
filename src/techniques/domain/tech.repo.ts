@@ -7,4 +7,8 @@ export default interface TechRepo {
   query: () => Promise<Tech[]>;
   queryById: (_id: string) => Promise<Tech>;
   search: (_queries: { key: string; value: unknown }[]) => Promise<Tech[]>;
+  searchPaged: (
+    _queries: { key: string; value: unknown }[],
+    _page: string
+  ) => Promise<{ techs: Tech[]; number: number }>;
 }

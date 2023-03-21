@@ -83,6 +83,37 @@ export const mockTechsController = new TechsController(
 
 export const mockDefaultController = new DefaultController();
 
+export const mockTech = {
+  id: 'TestId',
+  usersLearnt: [''],
+  usersInProgress: [''],
+  usersToLearn: [''],
+};
+
+export const mockAikidoUser = {
+  id: 'TestId',
+  email: 'TestMail',
+  password: count,
+  name: 'TestName',
+  lastName: 'TestLast',
+  grade: '2º kyu',
+  techsLearnt: [],
+  techsInProgress: ['TestTech', 'TestId'],
+  mainUke: '',
+};
+
+export const mockAikidoUserWithUke = {
+  id: 'TestId',
+  email: 'TestMail',
+  password: count,
+  name: 'TestName',
+  lastName: 'TestLast',
+  grade: '2º kyu',
+  techsLearnt: [],
+  techsInProgress: ['TestTech', 'TestId'],
+  mainUke: 'TestId',
+};
+
 export const mockReq = {
   body: {
     id: 'TestId',
@@ -97,9 +128,22 @@ export const mockReq = {
   },
 } as unknown as Request;
 
+export const mockNoBodyIdReq = {
+  query: {
+    page: '1',
+  },
+  body: { id: undefined },
+  params: {
+    id: 'TestId',
+  },
+} as unknown as Request;
+
 export const mockNoBodyReq = {
   query: {
     page: '1',
+  },
+  params: {
+    id: 'TestId',
   },
 } as unknown as Request;
 

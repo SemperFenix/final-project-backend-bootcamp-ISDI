@@ -168,14 +168,13 @@ export class AikidoUsersController {
 
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
 
-      const user = req.body;
+      const userToUpdate = await this.aikidoUserQuerierId.execute(id);
 
-      const userToUpdate = await this.aikidoUserQuerierId.execute(user.id);
-
-      userToUpdate.techsLearnt.push(req.body.tech);
+      userToUpdate.techsLearnt.push(req.body);
       userToUpdate.techsInProgress = userToUpdate.techsInProgress.filter(
-        (item) => item !== req.body.tech.id
+        (item) => item !== req.body.id
       );
+      // Add modify tech
 
       const updatedUser = await this.aikidoUserUpdater.execute(req.body);
       debug('Updated!');
@@ -219,7 +218,7 @@ export class AikidoUsersController {
       if (!ukeToAdd) throw new HTTPError(404, 'Not found', 'User not found');
 
       const user = await this.aikidoUserQuerierId.execute(id);
-      if (user.mainUke)
+      if (user.mainUke !== '' || undefined)
         throw new HTTPError(
           409,
           "Can't be more than one uke",
@@ -246,7 +245,7 @@ export class AikidoUsersController {
 
       const user = await this.aikidoUserQuerierId.execute(id);
 
-      user.mainUke = undefined;
+      user.mainUke = '';
 
       const updatedUser = await this.aikidoUserUpdater.execute(user);
       res.status(202);
@@ -262,14 +261,17 @@ export class AikidoUsersController {
   async addTech(req: CustomRequest, res: Response, next: NextFunction) {
     try {
       const userId = req.params.id;
-      const techId = req.body.tech;
+      const techId = req.body;
       if (!userId) throw new HTTPError(400, 'Bad request', 'No user provided');
       if (!techId) throw new HTTPError(400, 'Bad request', 'No tech provided');
 
       const user = await this.aikidoUserQuerierId.execute(userId);
-      const tech = await this.techQuerierId.execute(
-        techId as unknown as string
-      );
+      if (!user) throw new HTTPError(404, 'Not found', 'User not found');
+
+      const tech = await this.techQuerierId.execute(techId);
+      if (!tech) throw new HTTPError(404, 'Not found', 'Tech not found');
+
+      // Control de errores
 
       user.techsInProgress.push(techId);
       tech.usersInProgress.push(userId);
@@ -289,16 +291,14 @@ export class AikidoUsersController {
   async removeTech(req: CustomRequest, res: Response, next: NextFunction) {
     try {
       const userId = req.params.id;
-      const techId = req.body.tech;
+      const techId = req.body;
       if (!userId) throw new HTTPError(400, 'Bad request', 'No user provided');
       if (!techId) throw new HTTPError(400, 'Bad request', 'No tech provided');
 
       const user = await this.aikidoUserQuerierId.execute(userId);
       if (!user) throw new HTTPError(404, 'Not found', 'User not found');
 
-      const tech = await this.techQuerierId.execute(
-        techId as unknown as string
-      );
+      const tech = await this.techQuerierId.execute(techId);
       if (!tech) throw new HTTPError(404, 'Not found', 'Tech not found');
 
       user.techsInProgress = user.techsInProgress.filter(

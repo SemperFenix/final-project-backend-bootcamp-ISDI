@@ -1,5 +1,5 @@
 import { mockAikidoUserRepo } from '../../common/mocks/test.mocks.js';
-import AikidoUserSearcherPaged from './aikido.users.searcherPaged.js';
+import AikidoUserSearcherPaged from './aikido.users.searcher.paged.js';
 
 describe('Given the AikidoUserSearcherPaged class', () => {
   describe('When call its execute method', () => {

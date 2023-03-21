@@ -31,8 +31,8 @@ export class ProtoAikidoUser {
     public avatar?: string,
     public age?: number,
     public timePracticing?: string,
-    public principalSensei?: AikidoUser,
-    public mainUke?: AikidoUser
+    public principalSensei?: AikidoUser['id'],
+    public mainUke?: AikidoUser['id']
   ) {
     debug('Aikido User instantiated');
   }
@@ -45,16 +45,16 @@ export class AikidoUser extends ProtoAikidoUser {
     public name: string,
     public lastName: string,
     public grade: Grades,
-    public techsLearnt: Tech[],
-    public techsInProgress: Tech[],
+    public techsLearnt: Tech['id'][],
+    public techsInProgress: Tech['id'][],
     public role: 'user' | 'sensei',
     public techToReview: string, // Esta propiedad está añadida por si me da tiempo a aumentar funcionalidades
     public id: string,
     public avatar?: string,
     public age?: number,
     public timePracticing?: string,
-    public principalSensei?: AikidoUser,
-    public mainUke?: AikidoUser
+    public principalSensei?: AikidoUser['id'],
+    public mainUke?: AikidoUser['id']
   ) {
     super(
       email,

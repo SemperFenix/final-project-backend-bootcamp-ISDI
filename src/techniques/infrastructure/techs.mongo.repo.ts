@@ -46,6 +46,30 @@ export default class TechMongoRepo implements TechRepo {
     return techs;
   }
 
+  async searchPaged(
+    queries: { key: string; value: unknown }[],
+    page: string
+  ): Promise<{ techs: Tech[]; number: number }> {
+    if (Number(page) < 1) page = '1';
+    const skipNumber = page === '1' ? 0 : (Number(page) - 1) * 3;
+    const protoQuery = queries.map((item) => ({ [item.key]: item.value }));
+    const myQueries = protoQuery.reduce((obj, item) => ({ ...obj, ...item }));
+    const number = await TechModel.find({ ...myQueries })
+      .count()
+      .exec();
+
+    const techs = await TechModel.find({ ...myQueries })
+      .skip(number <= 3 ? 0 : skipNumber)
+      .limit(3)
+      .populate('usersLearnt')
+      .populate('usersInProgress')
+      .populate('usersToLearn')
+      .exec();
+
+    debug('Search completed! =)');
+    return { techs, number };
+  }
+
   async create(entity: ProtoTech): Promise<Tech> {
     const newTech = await TechModel.create(entity);
     debug('Hey, nice tech! ;)');

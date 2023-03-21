@@ -38,7 +38,6 @@ const mockExec = () => ({
 
 const arrangeSearch = async (page: string) => {
   popValue = [{}];
-  popValue = [{}];
   (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockCount);
 
   (AikidoUserModel.find as jest.Mock).mockImplementationOnce(mockLimit);

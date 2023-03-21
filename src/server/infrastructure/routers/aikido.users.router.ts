@@ -22,20 +22,30 @@ export default class AikidoUserRouter implements ServerRouter {
       '/login',
       this.aikidoUsersControllers.login.bind(this.aikidoUsersControllers)
     );
+
     this.router.get(
-      '/users/senseis?:id',
+      '/users/list/:id?:id',
       Interceptors.logged,
-      this.aikidoUsersControllers.getSenseisCategorized.bind(
+      this.aikidoUsersControllers.getUsersCategorized.bind(
         this.aikidoUsersControllers
       )
     );
-    this.router.get(
-      '/users/students?:id',
-      Interceptors.logged,
-      this.aikidoUsersControllers.getStudentsCategorized.bind(
-        this.aikidoUsersControllers
-      )
-    );
+
+    // Queda comentado por si acaso => Funcionaba
+    // this.router.get(
+    //   '/users/senseis?:id',
+    //   Interceptors.logged,
+    //   this.aikidoUsersControllers.getSenseisCategorized.bind(
+    //     this.aikidoUsersControllers
+    //   )
+    // );
+    // this.router.get(
+    //   '/users/students?:id',
+    //   Interceptors.logged,
+    //   this.aikidoUsersControllers.getStudentsCategorized.bind(
+    //     this.aikidoUsersControllers
+    //   )
+    // );
 
     this.router.get(
       '/users/:id',

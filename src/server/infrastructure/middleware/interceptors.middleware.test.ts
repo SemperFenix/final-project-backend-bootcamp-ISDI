@@ -65,14 +65,14 @@ describe('Given the interceptors class', () => {
   describe('When call the authorized method', () => {
     describe('And called with correct parameters', () => {
       test('Then it should call next function', () => {
-        mockReq.body = { id: '1' };
+        mockReq.body = { id: '1', userId: '1' };
         mockReq.credentials = { id: '1' } as unknown as TokenPayload;
         Interceptors.authorized(mockReq, mockResp, next);
         expect(next).toHaveBeenCalled();
       });
     });
 
-    describe('And called with no req body id', () => {
+    describe('And called with no req body userId', () => {
       test('Then it should take req params id and call next if matches', () => {
         mockReq.body = { name: 'Test' };
         mockReq.params = { id: '1' };
@@ -84,7 +84,7 @@ describe('Given the interceptors class', () => {
 
     describe('And called with no matching ids', () => {
       test('Then it should call next (error)', () => {
-        mockReq.body = { id: '2' };
+        mockReq.body = { id: '2', userId: '2' };
         mockReq.credentials = { id: '1' } as unknown as TokenPayload;
         const error = new HTTPError(401, 'Unauthorized', 'Not allowed action');
         Interceptors.authorized(mockReq, mockResp, next);
@@ -109,7 +109,7 @@ describe('Given the interceptors class', () => {
   describe('When call the admin method', () => {
     describe('And called with correct parameters', () => {
       test('Then it should call next function', () => {
-        mockReq.body = { id: '1' };
+        mockReq.body = { id: '1', userId: '1' };
         mockReq.credentials = { role: 'sensei' } as unknown as TokenPayload;
         Interceptors.admin(mockReq, mockResp, next);
         expect(next).toHaveBeenCalled();
@@ -128,7 +128,7 @@ describe('Given the interceptors class', () => {
 
     describe('And called with no admin credentials role', () => {
       test('Then it should call next (error)', () => {
-        mockReq.body = { id: '2' };
+        mockReq.body = { id: '2', userId: '1' };
         mockReq.credentials = { role: 'user' } as unknown as TokenPayload;
         const error = new HTTPError(401, 'Unauthorized', 'Not allowed action');
         Interceptors.admin(mockReq, mockResp, next);

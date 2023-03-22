@@ -49,9 +49,9 @@ export abstract class Interceptors {
       if (!req.credentials)
         throw new HTTPError(498, 'Token not found', 'No member in the request');
 
-      if (!req.body.id) req.body.id = req.params.id;
+      if (!req.body.userId) req.body.userId = req.params.id;
 
-      if (req.credentials.id !== req.body.id)
+      if (req.credentials.id !== req.body.userId)
         throw new HTTPError(401, 'Unauthorized', 'Not allowed action');
       debug('Yes, you can!');
       next();
@@ -66,7 +66,7 @@ export abstract class Interceptors {
       if (!req.credentials)
         throw new HTTPError(498, 'Token not found', 'No member in the request');
 
-      if (!req.body.id) req.body.id = req.params.id;
+      if (!req.body.userId) req.body.userId = req.params.id;
       if (req.credentials.role !== 'sensei')
         throw new HTTPError(401, 'Unauthorized', 'Not allowed action');
       debug('Thanks, sensei!');

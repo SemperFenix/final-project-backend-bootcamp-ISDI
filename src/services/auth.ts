@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { config } from '../config.js';
-import bcrypt from 'bcryptjs';
 import { HTTPError } from '../common/errors/http.error.js';
+import bcrypt from 'bcryptjs';
 
 const salt = 10;
 

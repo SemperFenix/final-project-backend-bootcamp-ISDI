@@ -29,9 +29,14 @@ export class TechsController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      if (!req.body.tech)
+      const { tech } = req.body;
+      if (!tech)
         throw new HTTPError(406, 'No data provided', 'No data provided');
-      const newTech = await this.techCreator.execute(req.body.tech);
+      tech.usersLearnt = [];
+      tech.usersInProgress = [];
+      tech.usersToLearn = [];
+
+      const newTech = await this.techCreator.execute(tech);
 
       debug('Tech added! =)');
       res.status(201);

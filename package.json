@@ -68,5 +68,8 @@
   "bugs": {
     "url": "https://github.com/isdi-coders-2023/Ivan-Duran-Final-Project-back-202301-mad/issues"
   },
-  "homepage": "https://github.com/isdi-coders-2023/Ivan-Duran-Final-Project-back-202301-mad#readme"
+  "homepage": "https://github.com/isdi-coders-2023/Ivan-Duran-Final-Project-back-202301-mad#readme",
+  "dependencies": {
+    "@types/bcryptjs": "^2.4.2"
+  }
 }

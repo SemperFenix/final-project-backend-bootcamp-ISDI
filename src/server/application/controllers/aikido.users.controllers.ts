@@ -13,6 +13,7 @@ import { CustomRequest } from '../../infrastructure/middleware/interceptors.midd
 import AikidoUserSearcherPaged from '../../../aikido.users/application/aikido.users.searcher.paged.js';
 import TechUpdater from '../../../techniques/application/techs.updater.js';
 import TechQuerierId from '../../../techniques/application/techs.querier.id.js';
+import { AikidoUser } from '../../../aikido.users/domain/aikido.user.js';
 
 const debug = createDebug('AiJo:AiUsController');
 
@@ -35,14 +36,16 @@ export class AikidoUsersController {
   async register(req: Request, res: Response, next: NextFunction) {
     try {
       debug('Registering...');
+      const info: AikidoUser = req.body.user;
 
-      if (!req.body.email || !req.body.password)
+      if (!info.email || !info.password)
         throw new HTTPError(401, 'Unathorized', 'No email or pass provided');
-      req.body.password = await Auth.hash(req.body.password);
-      req.body.role = 'user';
-      req.body.techsLearnt = [];
-      req.body.techsInProgress = [];
-      const newAikidoUser = await this.aikidoUserCreator.execute(req.body);
+      info.password = await Auth.hash(info.password);
+      info.role = 'user';
+      info.techsLearnt = [];
+      info.techsInProgress = [];
+      info.principalSensei = '6412e5c19d5869254d915887';
+      const newAikidoUser = await this.aikidoUserCreator.execute(info);
       res.status(201);
       res.json({ results: [newAikidoUser] });
     } catch (error) {
@@ -53,9 +56,10 @@ export class AikidoUsersController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
+      debugger;
       debug('Logging in...');
 
-      const { email, password } = req.body;
+      const { email, password } = req.body.user;
       if (!email || !password)
         throw new HTTPError(401, 'Unauthorized', 'Invalid email or password');
       const aikidoUser = await this.aikidoUserSearcher.execute([
@@ -145,11 +149,11 @@ export class AikidoUsersController {
 
       // Un usuario normal no puede editar algunos de sus campos, por lo que, incluso si los manda, los elimino para que no los pase al updater
 
-      delete req.body.grade;
-      delete req.body.techsLearnt;
-      delete req.body.mainUke;
+      delete req.body.user.grade;
+      delete req.body.user.techsLearnt;
+      delete req.body.user.mainUke;
 
-      const user = await this.aikidoUserUpdater.execute(req.body);
+      const user = await this.aikidoUserUpdater.execute(req.body.user);
       debug('Updated!');
       res.status(202);
 
@@ -169,13 +173,21 @@ export class AikidoUsersController {
 
       const userToUpdate = await this.aikidoUserQuerierId.execute(id);
 
-      userToUpdate.techsLearnt.push(req.body);
+      userToUpdate.techsLearnt.push(req.body.user.id);
       userToUpdate.techsInProgress = userToUpdate.techsInProgress.filter(
-        (item) => item !== req.body.id
+        (item) => item !== req.body.user.id
       );
-      // Add modify tech
 
-      const updatedUser = await this.aikidoUserUpdater.execute(req.body);
+      const tech = await this.techQuerierId.execute(req.body.tech.id);
+
+      tech.usersLearnt.push(id);
+      tech.usersInProgress = tech.usersInProgress.filter((item) => item !== id);
+
+      await this.techUpdater.execute(tech);
+
+      const updatedUser = await this.aikidoUserUpdater.execute(
+        req.body.user.id
+      );
       debug('Updated!');
       res.status(202);
 
@@ -209,10 +221,10 @@ export class AikidoUsersController {
     try {
       const { id } = req.params;
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
-      if (!req.body.id)
+      if (!req.body.user.id)
         throw new HTTPError(400, 'Bad request', 'No user provided');
 
-      const ukeToAdd = await this.aikidoUserQuerierId.execute(req.body.id);
+      const ukeToAdd = await this.aikidoUserQuerierId.execute(req.body.user.id);
 
       if (!ukeToAdd) throw new HTTPError(404, 'Not found', 'User not found');
 
@@ -260,7 +272,7 @@ export class AikidoUsersController {
   async addTech(req: CustomRequest, res: Response, next: NextFunction) {
     try {
       const userId = req.params.id;
-      const techId = req.body;
+      const techId = req.body.tech.id;
       if (!userId) throw new HTTPError(400, 'Bad request', 'No user provided');
       if (!techId) throw new HTTPError(400, 'Bad request', 'No tech provided');
 
@@ -290,7 +302,7 @@ export class AikidoUsersController {
   async removeTech(req: CustomRequest, res: Response, next: NextFunction) {
     try {
       const userId = req.params.id;
-      const techId = req.body;
+      const techId = req.body.tech.id;
       if (!userId) throw new HTTPError(400, 'Bad request', 'No user provided');
       if (!techId) throw new HTTPError(400, 'Bad request', 'No tech provided');
 

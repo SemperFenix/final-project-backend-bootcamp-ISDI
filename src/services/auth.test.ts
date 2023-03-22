@@ -3,7 +3,10 @@ import { config } from '../config.js';
 import { Auth, TokenPayload } from './auth.js';
 import bcrypt from 'bcryptjs';
 
-jest.mock('bcryptjs');
+jest.mock('bcryptjs', () => ({
+  hash: jest.fn(),
+  compare: jest.fn(),
+}));
 
 jest.mock('../config', () => ({
   config: {

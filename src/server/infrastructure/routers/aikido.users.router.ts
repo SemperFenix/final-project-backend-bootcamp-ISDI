@@ -31,26 +31,61 @@ export default class AikidoUserRouter implements ServerRouter {
       )
     );
 
-    // Queda comentado por si acaso => Funcionaba
-    // this.router.get(
-    //   '/users/senseis?:id',
-    //   Interceptors.logged,
-    //   this.aikidoUsersControllers.getSenseisCategorized.bind(
-    //     this.aikidoUsersControllers
-    //   )
-    // );
-    // this.router.get(
-    //   '/users/students?:id',
-    //   Interceptors.logged,
-    //   this.aikidoUsersControllers.getStudentsCategorized.bind(
-    //     this.aikidoUsersControllers
-    //   )
-    // );
-
     this.router.get(
       '/users/:id',
       Interceptors.logged,
       this.aikidoUsersControllers.getUserById.bind(this.aikidoUsersControllers)
+    );
+
+    this.router.patch(
+      '/update/:id',
+      Interceptors.logged,
+      Interceptors.authorized,
+      this.aikidoUsersControllers.updateSelfUser.bind(
+        this.aikidoUsersControllers
+      )
+    );
+
+    this.router.patch(
+      '/update/admin/:id',
+      Interceptors.logged,
+      Interceptors.admin,
+      this.aikidoUsersControllers.updateAdmin.bind(this.aikidoUsersControllers)
+    );
+
+    this.router.delete(
+      '/delete/:id',
+      Interceptors.logged,
+      Interceptors.authorized,
+      this.aikidoUsersControllers.deleteUser.bind(this.aikidoUsersControllers)
+    );
+
+    this.router.patch(
+      '/add-uke/:id',
+      Interceptors.logged,
+      Interceptors.authorized,
+      this.aikidoUsersControllers.addUke.bind(this.aikidoUsersControllers)
+    );
+
+    this.router.patch(
+      '/remove-uke/:id',
+      Interceptors.logged,
+      Interceptors.authorized,
+      this.aikidoUsersControllers.removeUke.bind(this.aikidoUsersControllers)
+    );
+
+    this.router.patch(
+      '/add-tech/:id',
+      Interceptors.logged,
+      Interceptors.authorized,
+      this.aikidoUsersControllers.addTech.bind(this.aikidoUsersControllers)
+    );
+
+    this.router.patch(
+      '/remove-tech/:id',
+      Interceptors.logged,
+      Interceptors.authorized,
+      this.aikidoUsersControllers.removeTech.bind(this.aikidoUsersControllers)
     );
   }
 }

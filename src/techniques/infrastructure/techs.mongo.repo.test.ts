@@ -128,10 +128,16 @@ describe('Given the TechsRepo', () => {
 
   describe('When call the create method', () => {
     test('Then it should return the created Tech', async () => {
-      (TechModel.create as jest.Mock).mockResolvedValue({ attack: 'Test' });
-      const result = await repo.create({ attack: 'Test' } as Tech);
-      expect(TechModel.create).toHaveBeenCalledWith({ attack: 'Test' });
-      expect(result).toEqual({ attack: 'Test' });
+      (TechModel.create as jest.Mock).mockResolvedValue({
+        attack: 'Ai hanmi katate-dori',
+      });
+      const result = await repo.create({
+        attack: 'Ai hanmi katate-dori',
+      } as Tech);
+      expect(TechModel.create).toHaveBeenCalledWith({
+        attack: 'Ai hanmi katate-dori',
+      });
+      expect(result).toEqual({ attack: 'Ai hanmi katate-dori' });
     });
   });
 
@@ -140,7 +146,7 @@ describe('Given the TechsRepo', () => {
       test('Then it should return the user updated', async () => {
         popTechValue = { attack: 'UpdTest', id: '1' };
         (TechModel.findByIdAndUpdate as jest.Mock).mockImplementation(mockExec);
-        const entity = { attack: 'Test', id: '1' };
+        const entity = { attack: 'Shomen-uchi', id: '1' } as Tech;
         const result = await repo.update(entity);
         expect(TechModel.findByIdAndUpdate).toHaveBeenCalledWith(
           entity.id,
@@ -157,7 +163,7 @@ describe('Given the TechsRepo', () => {
       test('Then it should throw error', async () => {
         popTechValue = undefined;
         (TechModel.findByIdAndUpdate as jest.Mock).mockImplementation(mockExec);
-        const result = repo.update({ attack: 'Test' });
+        const result = repo.update({ attack: 'Ai hanmi katate-dori' });
         await expect(result).rejects.toThrow();
       });
     });

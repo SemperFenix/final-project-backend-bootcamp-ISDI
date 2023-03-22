@@ -29,9 +29,14 @@ export class TechsController {
 
   async create(req: Request, res: Response, next: NextFunction) {
     try {
-      if (!req.body)
+      const { tech } = req.body;
+      if (!tech)
         throw new HTTPError(406, 'No data provided', 'No data provided');
-      const newTech = await this.techCreator.execute(req.body);
+      tech.usersLearnt = [];
+      tech.usersInProgress = [];
+      tech.usersToLearn = [];
+
+      const newTech = await this.techCreator.execute(tech);
 
       debug('Tech added! =)');
       res.status(201);
@@ -60,7 +65,7 @@ export class TechsController {
       const { id } = req.params;
       if (!id) throw new HTTPError(406, 'No data provided', 'No data provided');
 
-      const updatedTech = await this.techUpdater.execute(req.body);
+      const updatedTech = await this.techUpdater.execute(req.body.tech);
       if (!updatedTech) throw new HTTPError(404, 'Not found', 'Tech not found');
 
       debug('Tech updated! =)');

@@ -57,7 +57,8 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
     page: string
   ): Promise<{ members: AikidoUser[]; number: number }> {
     if (Number(page) < 1) page = '1';
-    const skipNumber = page === '1' ? 0 : (Number(page) - 1) * 3;
+    const limit = 3;
+    const skipNumber = page === '1' ? 0 : (Number(page) - 1) * limit;
     const protoQuery = queries.map((item) => ({ [item.key]: item.value }));
     const myQueries = protoQuery.reduce((obj, item) => ({ ...obj, ...item }));
     const number = await AikidoUserModel.find({ ...myQueries })
@@ -65,8 +66,8 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
       .exec();
 
     const members = await AikidoUserModel.find({ ...myQueries })
-      .skip(number <= 3 ? 0 : skipNumber)
-      .limit(3)
+      .skip(number <= limit ? 0 : skipNumber)
+      .limit(limit)
       .populate('techsLearnt')
       .populate('techsInProgress')
       .populate('principalSensei')

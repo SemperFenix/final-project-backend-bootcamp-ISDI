@@ -22,22 +22,26 @@ const techsSchema = new Schema<Tech>({
     {
       type: Schema.Types.ObjectId,
       ref: 'Aikido_User',
+      required: true,
     },
   ],
   usersInProgress: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Aikido_User',
+      required: true,
     },
   ],
   usersToLearn: [
     {
       type: Schema.Types.ObjectId,
       ref: 'Aikido_User',
+      required: true,
     },
   ],
   video: {
     type: String,
+    required: true,
   },
 });
 

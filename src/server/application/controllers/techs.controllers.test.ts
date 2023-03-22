@@ -2,12 +2,12 @@ import { HTTPError } from '../../../common/errors/http.error.js';
 import {
   mockCustomReq,
   mockNext,
-  mockNoBodyReq,
   mockNoPageReq,
   mockNoParamsReq,
-  mockReq,
+  mockNoTechBodyReq,
   mockRes,
   mockTechRepo,
+  mockTechReq,
   mockTechsController,
 } from '../../../common/mocks/test.mocks.js';
 
@@ -24,13 +24,13 @@ describe('Given the TechsController class', () => {
     jest.clearAllMocks();
   });
 
-  describe('When call the register method', () => {
+  describe('When call the create method', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
         (mockTechRepo.create as jest.Mock).mockResolvedValueOnce({
           name: 'TestOk',
         });
-        await mockTechsController.create(mockReq, mockRes, mockNext);
+        await mockTechsController.create(mockTechReq, mockRes, mockNext);
         expect(mockRes.json).toHaveBeenCalled();
       });
     });
@@ -45,7 +45,7 @@ describe('Given the TechsController class', () => {
           'No data provided',
           'No data provided'
         );
-        await mockTechsController.create(mockNoBodyReq, mockRes, mockNext);
+        await mockTechsController.create(mockNoTechBodyReq, mockRes, mockNext);
 
         expect(mockNext).toHaveBeenCalledWith(error);
       });

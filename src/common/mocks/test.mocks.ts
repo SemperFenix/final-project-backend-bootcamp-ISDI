@@ -116,12 +116,40 @@ export const mockAikidoUserWithUke = {
 
 export const mockReq = {
   body: {
+    user: {
+      id: 'TestId',
+      email: 'TestMail',
+      password: count,
+      name: 'TestName',
+      lastName: 'TestLast',
+      grade: '2º kyu',
+    },
+  },
+  query: {
+    page: '1',
+  },
+} as unknown as Request;
+
+export const mockNoTechBodyReq = {
+  body: {},
+  query: {
+    page: '1',
+  },
+  params: {
     id: 'TestId',
-    email: 'TestMail',
-    password: count,
-    name: 'TestName',
-    lastName: 'TestLast',
-    grade: '2º kyu',
+  },
+} as unknown as Request;
+
+export const mockTechReq = {
+  body: {
+    tech: {
+      id: 'TestId',
+      email: 'TestMail',
+      password: count,
+      name: 'TestName',
+      lastName: 'TestLast',
+      grade: '2º kyu',
+    },
   },
   query: {
     page: '1',
@@ -132,13 +160,14 @@ export const mockNoBodyIdReq = {
   query: {
     page: '1',
   },
-  body: { id: undefined },
+  body: { user: { id: undefined }, tech: { id: undefined } },
   params: {
     id: 'TestId',
   },
 } as unknown as Request;
 
 export const mockNoBodyReq = {
+  body: { user: {}, tech: {} },
   query: {
     page: '1',
   },
@@ -149,12 +178,18 @@ export const mockNoBodyReq = {
 
 export const mockCustomReq = {
   body: {
-    id: 'TestId',
-    email: 'TestMail',
-    password: count,
-    name: 'TestName',
-    lastName: 'TestLast',
-    grade: '2º kyu',
+    userId: 'TestId',
+    tech: {
+      id: 'TestTech',
+    },
+    user: {
+      id: 'TestId',
+      email: 'TestMail',
+      password: count,
+      name: 'TestName',
+      lastName: 'TestLast',
+      grade: '2º kyu',
+    },
   },
   credentials: {
     role: 'user',
@@ -171,6 +206,7 @@ export const mockCustomReq = {
 
 export const mockUserReq = {
   body: {
+    userId: 'TestId',
     id: 'TestId',
     email: 'TestMail',
     password: count,
@@ -191,6 +227,7 @@ export const mockUserReq = {
 
 export const mockUserNoPageReq = {
   body: {
+    userId: 'TestId',
     id: 'TestId',
     email: 'TestMail',
     password: count,
@@ -211,6 +248,7 @@ export const mockUserNoPageReq = {
 
 export const mockSenseiReq = {
   body: {
+    userId: 'TestId',
     id: 'TestId',
     email: 'TestMail',
     password: count,
@@ -231,11 +269,18 @@ export const mockSenseiReq = {
 
 export const mockNoParamsReq = {
   body: {
-    email: 'TestMail',
-    password: count,
-    name: 'TestName',
-    lastName: 'TestLast',
-    grade: '2º kyu',
+    userId: 'TestId',
+    tech: {
+      id: 'TestTech',
+    },
+    user: {
+      id: 'TestId',
+      email: 'TestMail',
+      password: count,
+      name: 'TestName',
+      lastName: 'TestLast',
+      grade: '2º kyu',
+    },
   },
   params: { id: undefined },
   credentials: {
@@ -248,8 +293,10 @@ export const mockNoParamsReq = {
 
 export const mockNoEmailReq = {
   body: {
-    password: count,
-    name: 'TestName',
+    user: {
+      password: count,
+      name: 'TestName',
+    },
   },
 } as unknown as Request;
 
@@ -263,8 +310,10 @@ export const mockNoPageReq = {
 
 export const mockNoPassReq = {
   body: {
-    email: 'TestMail',
-    name: 'TestName',
+    user: {
+      email: 'TestMail',
+      name: 'TestName',
+    },
   },
 } as unknown as Request;
 

@@ -93,7 +93,7 @@ describe('Given the AikidoUsersController class', () => {
   describe('When call the login method', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        mockReq.body.password = count;
+        mockReq.body.user.password = count;
         (Auth.compareHash as jest.Mock).mockResolvedValueOnce(true);
         (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce([
           'Test',
@@ -303,6 +303,8 @@ describe('Given the AikidoUsersController class', () => {
           mockAikidoUser
         );
         (mockAikidoUserRepo.update as jest.Mock).mockResolvedValueOnce({});
+        (mockTechRepo.queryById as jest.Mock).mockResolvedValueOnce(mockTech);
+        (mockTechRepo.update as jest.Mock).mockResolvedValueOnce({});
 
         await mockAikidoUsersController.updateAdmin(
           mockCustomReq,

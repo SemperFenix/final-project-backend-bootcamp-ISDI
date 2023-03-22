@@ -5,9 +5,9 @@ describe('Given the AikidoUser class', () => {
     test('Then it should create a new object of the class', () => {
       const tech = new Tech(
         'TestId',
-        'TestAtt',
-        'TestTech',
-        'TestSta',
+        'Ai hanmi katate-dori',
+        'Gokyo',
+        'Hanmi handachi-waza',
         '1º kyu',
         [],
         [],

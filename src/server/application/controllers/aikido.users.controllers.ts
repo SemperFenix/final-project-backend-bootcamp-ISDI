@@ -57,14 +57,13 @@ export class AikidoUsersController {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       debug('Logging in...');
-
       const { email, password } = req.body.user;
       if (!email || !password)
         throw new HTTPError(401, 'Unauthorized', 'Invalid email or password');
       const aikidoUser = await this.aikidoUserSearcher.execute([
         { key: 'email', value: email },
       ]);
-      if (!aikidoUser)
+      if (!aikidoUser.length)
         throw new HTTPError(401, 'Unauthorized', 'Invalid email or password');
       if (!(await Auth.compareHash(password, aikidoUser[0].password)))
         throw new HTTPError(401, 'Unauthorized', 'Password not match');

@@ -137,9 +137,7 @@ describe('Given the AikidoUsersController class', () => {
     });
     describe('And there is no user with the id', () => {
       test('Then it should call next', async () => {
-        (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce(
-          undefined
-        );
+        (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce([]);
         const error = new HTTPError(
           401,
           'Unauthorized',

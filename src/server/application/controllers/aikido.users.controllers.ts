@@ -56,7 +56,6 @@ export class AikidoUsersController {
 
   async login(req: Request, res: Response, next: NextFunction) {
     try {
-      debugger;
       debug('Logging in...');
 
       const { email, password } = req.body.user;

@@ -51,7 +51,8 @@ export default class TechMongoRepo implements TechRepo {
     page: string
   ): Promise<{ techs: Tech[]; number: number }> {
     if (Number(page) < 1) page = '1';
-    const skipNumber = page === '1' ? 0 : (Number(page) - 1) * 3;
+    const limit = 3;
+    const skipNumber = page === '1' ? 0 : (Number(page) - 1) * limit;
     const protoQuery = queries.map((item) => ({ [item.key]: item.value }));
     const myQueries = protoQuery.reduce((obj, item) => ({ ...obj, ...item }));
     const number = await TechModel.find({ ...myQueries })
@@ -59,8 +60,8 @@ export default class TechMongoRepo implements TechRepo {
       .exec();
 
     const techs = await TechModel.find({ ...myQueries })
-      .skip(number <= 3 ? 0 : skipNumber)
-      .limit(3)
+      .skip(number <= limit ? 0 : skipNumber)
+      .limit(limit)
       .populate('usersLearnt')
       .populate('usersInProgress')
       .populate('usersToLearn')

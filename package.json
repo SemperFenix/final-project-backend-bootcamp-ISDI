@@ -31,6 +31,7 @@
   "author": "Ivan Duran",
   "license": "ISC",
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.2",
     "@types/cors": "^2.8.13",
     "@types/debug": "^4.1.7",
     "@types/express": "^4.17.17",
@@ -68,8 +69,5 @@
   "bugs": {
     "url": "https://github.com/isdi-coders-2023/Ivan-Duran-Final-Project-back-202301-mad/issues"
   },
-  "homepage": "https://github.com/isdi-coders-2023/Ivan-Duran-Final-Project-back-202301-mad#readme",
-  "dependencies": {
-    "@types/bcryptjs": "^2.4.2"
-  }
+  "homepage": "https://github.com/isdi-coders-2023/Ivan-Duran-Final-Project-back-202301-mad#readme"
 }

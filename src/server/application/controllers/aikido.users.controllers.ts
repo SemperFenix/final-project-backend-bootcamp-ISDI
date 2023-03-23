@@ -216,7 +216,6 @@ export class AikidoUsersController {
   }
 
   async addUke(req: CustomRequest, res: Response, next: NextFunction) {
-    debugger;
     try {
       const { id } = req.params;
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');

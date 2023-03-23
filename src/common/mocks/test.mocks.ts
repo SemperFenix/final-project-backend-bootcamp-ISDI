@@ -304,6 +304,9 @@ export const mockNoPageReq = {
     password: count,
     name: 'TestName',
   },
+  params: {
+    id: 'TestId',
+  },
   query: {},
 } as unknown as Request;
 

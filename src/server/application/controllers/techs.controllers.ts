@@ -80,8 +80,10 @@ export class TechsController {
   async queryAll(req: Request, res: Response, next: NextFunction) {
     try {
       const tech = req.params.id;
+      if (!tech) throw new HTTPError(400, 'Bad request', 'No tech provided');
       const { page } = req.query;
-      if (!tech) throw new HTTPError(400, 'Bad request', 'No user provided');
+
+      if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
 
       const techs = await this.techSearcherPaged.execute(
         [{ key: 'tech', value: tech }],

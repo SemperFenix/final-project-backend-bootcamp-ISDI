@@ -108,6 +108,37 @@ describe('Given the TechsController class', () => {
     });
   });
 
+  describe('When queryAll method is called', () => {
+    describe('And all params are correct', () => {
+      test('Then it should call res.json', async () => {
+        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce({
+          name: 'TestOk',
+        });
+        await mockTechsController.queryAll(mockCustomReq, mockRes, mockNext);
+        expect(mockRes.json).toHaveBeenCalled();
+      });
+    });
+
+    describe('And there is no id in params', () => {
+      test('Then it should call res.json', async () => {
+        const error = new HTTPError(400, 'Bad request', 'No tech provided');
+        await mockTechsController.queryAll(mockNoParamsReq, mockRes, mockNext);
+        expect(mockNext).toHaveBeenCalledWith(error);
+      });
+    });
+
+    describe('And there is no page in query', () => {
+      test('Then it should call res.json', async () => {
+        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce({
+          name: 'TestOk',
+        });
+        const error = new HTTPError(400, 'Bad request', 'No page provided');
+        await mockTechsController.queryAll(mockNoPageReq, mockRes, mockNext);
+        expect(mockNext).toHaveBeenCalledWith(error);
+      });
+    });
+  });
+
   describe('When queryCategorized method is called', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {

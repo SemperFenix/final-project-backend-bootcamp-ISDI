@@ -28,11 +28,11 @@ export class ProtoAikidoUser {
     public name: string,
     public lastName: string,
     public grade: Grades,
+    public mainUke: AikidoUser['id'][],
     public avatar?: string,
     public age?: number,
     public timePracticing?: string,
-    public principalSensei?: AikidoUser['id'],
-    public mainUke?: AikidoUser['id']
+    public principalSensei?: AikidoUser['id']
   ) {
     debug('Aikido User instantiated');
   }
@@ -50,11 +50,11 @@ export class AikidoUser extends ProtoAikidoUser {
     public role: 'user' | 'sensei',
     public techToReview: string, // Esta propiedad está añadida por si me da tiempo a aumentar funcionalidades
     public id: string,
+    public mainUke: AikidoUser['id'][],
     public avatar?: string,
     public age?: number,
     public timePracticing?: string,
-    public principalSensei?: AikidoUser['id'],
-    public mainUke?: AikidoUser['id']
+    public principalSensei?: AikidoUser['id']
   ) {
     super(
       email,
@@ -62,11 +62,11 @@ export class AikidoUser extends ProtoAikidoUser {
       name,
       lastName,
       grade,
+      mainUke,
       avatar,
       age,
       timePracticing,
-      principalSensei,
-      mainUke
+      principalSensei
     );
     debug('Aikido Repo User instantiated');
   }

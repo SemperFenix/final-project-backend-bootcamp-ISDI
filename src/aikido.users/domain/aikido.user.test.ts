@@ -13,7 +13,8 @@ describe('Given the AikidoUser class', () => {
         [],
         'user',
         'TestTechId',
-        'TestId'
+        'TestId',
+        []
       );
       expect(aikidoUser).toBeInstanceOf(AikidoUser);
     });

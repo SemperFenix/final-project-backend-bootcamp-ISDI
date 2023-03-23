@@ -99,7 +99,7 @@ export const mockAikidoUser = {
   grade: '2º kyu',
   techsLearnt: [],
   techsInProgress: ['TestTech', 'TestId'],
-  mainUke: '',
+  mainUke: [],
 };
 
 export const mockAikidoUserWithUke = {
@@ -111,7 +111,7 @@ export const mockAikidoUserWithUke = {
   grade: '2º kyu',
   techsLearnt: [],
   techsInProgress: ['TestTech', 'TestId'],
-  mainUke: 'TestId',
+  mainUke: ['TestId'],
 };
 
 export const mockReq = {
@@ -274,7 +274,6 @@ export const mockNoParamsReq = {
       id: 'TestTech',
     },
     user: {
-      id: 'TestId',
       email: 'TestMail',
       password: count,
       name: 'TestName',

@@ -315,7 +315,7 @@ describe('Given the AikidoUsersController class', () => {
       });
     });
 
-    describe('And there is no id in params', () => {
+    describe('And there is no id in body.user', () => {
       test('Then it should call next', async () => {
         await mockAikidoUsersController.updateAdmin(
           mockNoParamsReq,
@@ -420,12 +420,12 @@ describe('Given the AikidoUsersController class', () => {
 
     describe('And the user already have an uke', () => {
       test('Then it should call next(error)', async () => {
-        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce({
-          mockAikidoUserWithUke,
-        });
-        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce({
-          mockAikidoUserWithUke,
-        });
+        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
+          mockAikidoUserWithUke
+        );
+        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
+          mockAikidoUserWithUke
+        );
 
         const error = new HTTPError(
           409,

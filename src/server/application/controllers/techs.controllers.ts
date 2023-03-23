@@ -113,7 +113,7 @@ export class TechsController {
       const techs = await this.techSearcherPaged.execute(query, page as string);
       debug('Techs found! =)');
       res.status(200);
-      res.json({ results: [techs] });
+      res.json({ results: { techs: [techs.techs], number: techs.number } });
     } catch (error) {
       next(error);
     }

@@ -142,8 +142,9 @@ describe('Given the TechsController class', () => {
   describe('When queryCategorized method is called', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce({
-          name: 'TestOk',
+        (mockTechRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
+          techs: [{}],
+          number: 0,
         });
         await mockTechsController.queryCategorized(
           mockCustomReq,
@@ -155,10 +156,7 @@ describe('Given the TechsController class', () => {
     });
 
     describe('And there is no page in query', () => {
-      test('Then it should call res.json', async () => {
-        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce({
-          name: 'TestOk',
-        });
+      test('Then it should call res.next', async () => {
         const error = new HTTPError(400, 'Bad request', 'No page provided');
         await mockTechsController.queryCategorized(
           mockNoPageReq,

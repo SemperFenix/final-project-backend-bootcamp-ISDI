@@ -149,6 +149,7 @@ export class AikidoUsersController {
 
       // Un usuario normal no puede editar algunos de sus campos, por lo que, incluso si los manda, los elimino para que no los pase al updater
       req.body.user.id = id;
+      delete req.body.user.password;
       delete req.body.user.grade;
       delete req.body.user.techsLearnt;
       delete req.body.user.mainUke;

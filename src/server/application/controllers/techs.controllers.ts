@@ -10,6 +10,7 @@ import TechQuerier from '../../../techniques/application/techs.querier.js';
 import TechSearcher from '../../../techniques/application/techs.searcher.js';
 import TechSearcherPaged from '../../../techniques/application/techs.searcher.paged.js';
 import TechUpdater from '../../../techniques/application/techs.updater.js';
+import { CustomRequest } from '../../infrastructure/middleware/interceptors.middleware.js';
 
 const debug = createDebug('AiJo:TechsController');
 
@@ -76,9 +77,34 @@ export class TechsController {
     }
   }
 
-  async queryCategorized(req: Request, res: Response, next: NextFunction) {
+  async queryAll(req: Request, res: Response, next: NextFunction) {
+    try {
+      const tech = req.params.id;
+      if (!tech) throw new HTTPError(400, 'Bad request', 'No tech provided');
+      const { page } = req.query;
+
+      if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
+
+      const techs = await this.techSearcherPaged.execute(
+        [{ key: 'tech', value: tech }],
+        page as string
+      );
+      debug('Tech found! =)');
+      res.status(200);
+      res.json({ results: [techs] });
+    } catch (error) {
+      next(error);
+    }
+  }
+
+  async queryCategorized(
+    req: CustomRequest,
+    res: Response,
+    next: NextFunction
+  ) {
     try {
       const { page } = req.query;
+      debug(req.query);
       if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
       delete req.query.page;
       const keys = Object.entries(req.query);
@@ -87,7 +113,7 @@ export class TechsController {
       const techs = await this.techSearcherPaged.execute(query, page as string);
       debug('Techs found! =)');
       res.status(200);
-      res.json({ results: [techs] });
+      res.json({ results: { techs: [techs.techs], number: techs.number } });
     } catch (error) {
       next(error);
     }

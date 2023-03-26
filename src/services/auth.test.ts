@@ -58,9 +58,10 @@ describe('Given the Auth class', () => {
     describe('When the token not match', () => {
       test('Then it should throw error', () => {
         (jwt.verify as jest.Mock).mockReturnValue('test');
+
         expect(() => {
           Auth.getTokenInfo('TestToken');
-        }).toThrow();
+        }).toThrowError();
       });
     });
 

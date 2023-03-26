@@ -48,10 +48,12 @@ const aikidoUserSchema = new Schema<AikidoUser>({
     type: Schema.Types.ObjectId,
     ref: 'Aikido_User',
   },
-  mainUke: {
-    type: Schema.Types.ObjectId,
-    ref: 'Aikido_User',
-  },
+  mainUke: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Aikido_User',
+    },
+  ],
   avatar: {
     type: String,
   },

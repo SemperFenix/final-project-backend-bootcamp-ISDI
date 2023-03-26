@@ -38,19 +38,19 @@ export default class AikidoUserRouter implements ServerRouter {
     );
 
     this.router.patch(
+      '/update/admin/:id',
+      Interceptors.logged,
+      Interceptors.admin,
+      this.aikidoUsersControllers.updateAdmin.bind(this.aikidoUsersControllers)
+    );
+
+    this.router.patch(
       '/update/:id',
       Interceptors.logged,
       Interceptors.authorized,
       this.aikidoUsersControllers.updateSelfUser.bind(
         this.aikidoUsersControllers
       )
-    );
-
-    this.router.patch(
-      '/update/admin/:id',
-      Interceptors.logged,
-      Interceptors.admin,
-      this.aikidoUsersControllers.updateAdmin.bind(this.aikidoUsersControllers)
     );
 
     this.router.delete(

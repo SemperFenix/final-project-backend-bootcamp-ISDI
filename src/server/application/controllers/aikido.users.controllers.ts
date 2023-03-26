@@ -40,9 +40,11 @@ export class AikidoUsersController {
 
       if (!info.email || !info.password)
         throw new HTTPError(401, 'Unathorized', 'No email or pass provided');
+      // Añadir control para avatar
       info.password = await Auth.hash(info.password);
       info.role = 'user';
       info.techsLearnt = [];
+      info.mainUke = [];
       info.techsInProgress = [];
       info.principalSensei = '6412e5c19d5869254d915887';
       const newAikidoUser = await this.aikidoUserCreator.execute(info);
@@ -57,14 +59,13 @@ export class AikidoUsersController {
   async login(req: Request, res: Response, next: NextFunction) {
     try {
       debug('Logging in...');
-
       const { email, password } = req.body.user;
       if (!email || !password)
         throw new HTTPError(401, 'Unauthorized', 'Invalid email or password');
       const aikidoUser = await this.aikidoUserSearcher.execute([
         { key: 'email', value: email },
       ]);
-      if (!aikidoUser)
+      if (!aikidoUser.length)
         throw new HTTPError(401, 'Unauthorized', 'Invalid email or password');
       if (!(await Auth.compareHash(password, aikidoUser[0].password)))
         throw new HTTPError(401, 'Unauthorized', 'Password not match');
@@ -147,7 +148,8 @@ export class AikidoUsersController {
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
 
       // Un usuario normal no puede editar algunos de sus campos, por lo que, incluso si los manda, los elimino para que no los pase al updater
-
+      req.body.user.id = id;
+      delete req.body.user.password;
       delete req.body.user.grade;
       delete req.body.user.techsLearnt;
       delete req.body.user.mainUke;
@@ -166,15 +168,15 @@ export class AikidoUsersController {
 
   async updateAdmin(req: CustomRequest, res: Response, next: NextFunction) {
     try {
-      const { id } = req.params;
+      const { id } = req.body.user;
 
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
 
       const userToUpdate = await this.aikidoUserQuerierId.execute(id);
 
-      userToUpdate.techsLearnt.push(req.body.user.id);
+      userToUpdate.techsLearnt.push(req.body.tech.id);
       userToUpdate.techsInProgress = userToUpdate.techsInProgress.filter(
-        (item) => item !== req.body.user.id
+        (item) => item !== req.body.tech.id
       );
 
       const tech = await this.techQuerierId.execute(req.body.tech.id);
@@ -184,9 +186,7 @@ export class AikidoUsersController {
 
       await this.techUpdater.execute(tech);
 
-      const updatedUser = await this.aikidoUserUpdater.execute(
-        req.body.user.id
-      );
+      const updatedUser = await this.aikidoUserUpdater.execute(userToUpdate);
       debug('Updated!');
       res.status(202);
 
@@ -228,14 +228,15 @@ export class AikidoUsersController {
       if (!ukeToAdd) throw new HTTPError(404, 'Not found', 'User not found');
 
       const user = await this.aikidoUserQuerierId.execute(id);
-      if (user.mainUke !== '' || undefined)
+      debug(user.mainUke.length);
+      if (user.mainUke.length !== 0)
         throw new HTTPError(
           409,
           "Can't be more than one uke",
           'Field restricted to single value'
         );
 
-      user.mainUke = ukeToAdd.id;
+      user.mainUke.push(ukeToAdd.id);
 
       const updatedUser = await this.aikidoUserUpdater.execute(user);
       res.status(202);
@@ -255,7 +256,7 @@ export class AikidoUsersController {
 
       const user = await this.aikidoUserQuerierId.execute(id);
 
-      user.mainUke = '';
+      user.mainUke.pop();
 
       const updatedUser = await this.aikidoUserUpdater.execute(user);
       res.status(202);

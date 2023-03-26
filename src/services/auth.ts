@@ -19,6 +19,7 @@ export class Auth {
 
   static getTokenInfo(token: string) {
     if (!config.secret) throw new Error('No secretto');
+
     const tokenInfo = jwt.verify(token, config.secret);
     if (typeof tokenInfo === 'string')
       throw new HTTPError(498, 'Invalid Token', tokenInfo);

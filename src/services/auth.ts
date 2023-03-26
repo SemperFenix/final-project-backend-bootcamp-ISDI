@@ -19,14 +19,11 @@ export class Auth {
 
   static getTokenInfo(token: string) {
     if (!config.secret) throw new Error('No secretto');
-    try {
-      const tokenInfo = jwt.verify(token, config.secret);
-      if (typeof tokenInfo === 'string')
-        throw new HTTPError(498, 'Invalid Token', tokenInfo);
-      return tokenInfo as TokenPayload;
-    } catch (error) {
-      console.log(error);
-    }
+
+    const tokenInfo = jwt.verify(token, config.secret);
+    if (typeof tokenInfo === 'string')
+      throw new HTTPError(498, 'Invalid Token', tokenInfo);
+    return tokenInfo as TokenPayload;
   }
 
   static hash(value: string) {

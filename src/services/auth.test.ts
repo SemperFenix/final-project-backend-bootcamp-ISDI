@@ -58,10 +58,10 @@ describe('Given the Auth class', () => {
     describe('When the token not match', () => {
       test('Then it should throw error', () => {
         (jwt.verify as jest.Mock).mockReturnValue('test');
-        const clg = jest.spyOn(console, 'log');
-        Auth.getTokenInfo('TestToken');
 
-        expect(clg).toHaveBeenCalled();
+        expect(() => {
+          Auth.getTokenInfo('TestToken');
+        }).toThrowError();
       });
     });
 

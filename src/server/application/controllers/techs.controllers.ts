@@ -104,11 +104,11 @@ export class TechsController {
   ) {
     try {
       debug(req.query);
-
       const keys = Object.entries(req.query);
       const query = keys.map((item) => ({ key: item[0], value: item[1] }));
-
       const techs = await this.techSearcher.execute(query);
+      if (techs.length === 0)
+        throw new HTTPError(404, 'Not found', 'No techs found');
       debug('Techs found! =)');
       res.status(200);
       res.json({ results: [techs] });

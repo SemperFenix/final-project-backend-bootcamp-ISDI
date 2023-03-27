@@ -103,17 +103,15 @@ export class TechsController {
     next: NextFunction
   ) {
     try {
-      const { page } = req.query;
       debug(req.query);
-      if (!page) throw new HTTPError(400, 'Bad request', 'No page provided');
-      delete req.query.page;
       const keys = Object.entries(req.query);
       const query = keys.map((item) => ({ key: item[0], value: item[1] }));
-
-      const techs = await this.techSearcherPaged.execute(query, page as string);
+      const techs = await this.techSearcher.execute(query);
+      if (techs.length === 0)
+        throw new HTTPError(404, 'Not found', 'No techs found');
       debug('Techs found! =)');
       res.status(200);
-      res.json({ results: { techs: [techs.techs], number: techs.number } });
+      res.json({ results: [techs] });
     } catch (error) {
       next(error);
     }

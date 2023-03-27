@@ -111,8 +111,9 @@ describe('Given the TechsController class', () => {
   describe('When queryAll method is called', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce({
-          name: 'TestOk',
+        (mockTechRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
+          techs: 'TestOk',
+          number: 0,
         });
         await mockTechsController.queryAll(mockCustomReq, mockRes, mockNext);
         expect(mockRes.json).toHaveBeenCalled();
@@ -129,9 +130,6 @@ describe('Given the TechsController class', () => {
 
     describe('And there is no page in query', () => {
       test('Then it should call res.json', async () => {
-        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce({
-          name: 'TestOk',
-        });
         const error = new HTTPError(400, 'Bad request', 'No page provided');
         await mockTechsController.queryAll(mockNoPageReq, mockRes, mockNext);
         expect(mockNext).toHaveBeenCalledWith(error);
@@ -142,10 +140,7 @@ describe('Given the TechsController class', () => {
   describe('When queryCategorized method is called', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        (mockTechRepo.searchPaged as jest.Mock).mockResolvedValueOnce({
-          techs: [{}],
-          number: 0,
-        });
+        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce([{}, {}]);
         await mockTechsController.queryCategorized(
           mockCustomReq,
           mockRes,
@@ -155,11 +150,12 @@ describe('Given the TechsController class', () => {
       });
     });
 
-    describe('And there is no page in query', () => {
+    describe('And there is no techs found', () => {
       test('Then it should call res.next', async () => {
-        const error = new HTTPError(400, 'Bad request', 'No page provided');
+        const error = new HTTPError(404, 'Not found', 'No techs found');
+        (mockTechRepo.search as jest.Mock).mockResolvedValueOnce([]);
         await mockTechsController.queryCategorized(
-          mockNoPageReq,
+          mockCustomReq,
           mockRes,
           mockNext
         );

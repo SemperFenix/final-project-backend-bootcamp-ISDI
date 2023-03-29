@@ -170,7 +170,7 @@ describe('Given the AikidoUsersRepo', () => {
       test('Then it should return the user updated', async () => {
         popValue = { name: 'Pedro', id: '1' };
         (AikidoUserModel.findByIdAndUpdate as jest.Mock).mockImplementation(
-          mockExec
+          mockPopulateExec
         );
         const entity = { name: 'Test', id: '1' };
         const result = await repo.update(entity);
@@ -189,7 +189,7 @@ describe('Given the AikidoUsersRepo', () => {
       test('Then it should throw error', async () => {
         popValue = undefined;
         (AikidoUserModel.findByIdAndUpdate as jest.Mock).mockImplementation(
-          mockExec
+          mockPopulateExec
         );
         const result = repo.update({ name: 'Pedro' });
         await expect(result).rejects.toThrow();

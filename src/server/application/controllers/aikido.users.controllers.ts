@@ -159,6 +159,7 @@ export class AikidoUsersController {
       delete req.body.user.mainUke;
 
       const user = await this.aikidoUserUpdater.execute(req.body.user);
+
       debug('Updated!');
       res.status(202);
 

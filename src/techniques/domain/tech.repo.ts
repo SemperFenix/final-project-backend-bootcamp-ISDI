@@ -5,6 +5,7 @@ export default interface TechRepo {
   update: (_entity: Partial<Tech>) => Promise<Tech>;
   erase: (_id: string) => Promise<void>;
   query: () => Promise<Tech[]>;
+  unpopulatedQueryById: (_id: string) => Promise<Tech>;
   queryById: (_id: string) => Promise<Tech>;
   search: (_queries: { key: string; value: unknown }[]) => Promise<Tech[]>;
   searchPaged: (

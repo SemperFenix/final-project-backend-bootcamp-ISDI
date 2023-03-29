@@ -14,6 +14,8 @@ import AikidoUserSearcherPaged from '../../../aikido.users/application/aikido.us
 import TechUpdater from '../../../techniques/application/techs.updater.js';
 import TechQuerierId from '../../../techniques/application/techs.querier.id.js';
 import { AikidoUser } from '../../../aikido.users/domain/aikido.user.js';
+import AikidoUserUnpopulatedQuerierId from '../../../aikido.users/application/aikido.users.unpopulated.querier.id.js';
+import TechUnpopulatedQuerierId from '../../../techniques/application/techs.unpopulated.querier.id.js';
 
 const debug = createDebug('AiJo:AiUsController');
 
@@ -22,11 +24,13 @@ export class AikidoUsersController {
   constructor(
     private aikidoUserSearcher: AikidoUserSearcher,
     private aikidoUserQuerier: AikidoUserQuerier,
+    private aikidoUserUnpopulatedQuerierId: AikidoUserUnpopulatedQuerierId,
     private aikidoUserQuerierId: AikidoUserQuerierId,
     private aikidoUserCreator: AikidoUserCreator,
     private aikidoUserUpdater: AikidoUserUpdater,
     private aikidoUserEraser: AikidoUserEraser,
     private aikidoUserSearcherPaged: AikidoUserSearcherPaged,
+    private techUnpopulatedQuerierId: TechUnpopulatedQuerierId,
     private techQuerierId: TechQuerierId,
     private techUpdater: TechUpdater
   ) {
@@ -306,14 +310,14 @@ export class AikidoUsersController {
       if (!userId) throw new HTTPError(400, 'Bad request', 'No user provided');
       if (!techId) throw new HTTPError(400, 'Bad request', 'No tech provided');
 
-      const user = await this.aikidoUserQuerierId.execute(userId);
+      const user = await this.aikidoUserUnpopulatedQuerierId.execute(userId);
       if (!user) throw new HTTPError(404, 'Not found', 'User not found');
 
-      const tech = await this.techQuerierId.execute(techId);
+      const tech = await this.techUnpopulatedQuerierId.execute(techId);
       if (!tech) throw new HTTPError(404, 'Not found', 'Tech not found');
 
       user.techsInProgress = user.techsInProgress.filter(
-        (tech) => tech !== techId
+        (tech) => tech.toString() !== techId
       );
 
       tech.usersInProgress = tech.usersInProgress.filter(

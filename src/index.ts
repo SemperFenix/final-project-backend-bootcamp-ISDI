@@ -22,12 +22,17 @@ import DefaultRouter from './server/infrastructure/routers/default.router.js';
 import { DefaultController } from './server/application/controllers/default.controller.js';
 import AikidoUserSearcherPaged from './aikido.users/application/aikido.users.searcher.paged.js';
 import TechSearcherPaged from './techniques/application/techs.searcher.paged.js';
+import AikidoUserUnpopulatedQuerierId from './aikido.users/application/aikido.users.unpopulated.querier.id.js';
+import TechUnpopulatedQuerierId from './techniques/application/techs.unpopulated.querier.id.js';
 
 const bootstrap = async () => {
   const aikidoUsersRepository = new AikidoUserMongoRepo();
 
   const aikidoUserSearcher = new AikidoUserSearcher(aikidoUsersRepository);
   const aikidoUserQuerier = new AikidoUserQuerier(aikidoUsersRepository);
+  const aikidoUserUnpopulatedQuerierId = new AikidoUserUnpopulatedQuerierId(
+    aikidoUsersRepository
+  );
   const aikidoUserQuerierId = new AikidoUserQuerierId(aikidoUsersRepository);
   const aikidoUserCreator = new AikidoUserCreator(aikidoUsersRepository);
   const aikidoUserUpdater = new AikidoUserUpdater(aikidoUsersRepository);
@@ -40,6 +45,9 @@ const bootstrap = async () => {
 
   const techSearcher = new TechSearcher(techsRepository);
   const techQuerier = new TechQuerier(techsRepository);
+  const techUnpopulatedQuerierId = new TechUnpopulatedQuerierId(
+    techsRepository
+  );
   const techQuerierId = new TechQuerierId(techsRepository);
   const techCreator = new TechCreator(techsRepository);
   const techUpdater = new TechUpdater(techsRepository);
@@ -49,11 +57,13 @@ const bootstrap = async () => {
   const aikidoUserController = new AikidoUserController(
     aikidoUserSearcher,
     aikidoUserQuerier,
+    aikidoUserUnpopulatedQuerierId,
     aikidoUserQuerierId,
     aikidoUserCreator,
     aikidoUserUpdater,
     aikidoUserEraser,
     aikidoUserSearcherPaged,
+    techUnpopulatedQuerierId,
     techQuerierId,
     techUpdater
   );
@@ -61,6 +71,7 @@ const bootstrap = async () => {
   const techsController = new TechsController(
     techSearcher,
     techQuerier,
+    techUnpopulatedQuerierId,
     techQuerierId,
     techCreator,
     techUpdater,

@@ -1,3 +1,4 @@
+import { mockUnpopulatedAikidoUser } from '../../common/mocks/test.mocks.js';
 import { AikidoUserModel } from '../../server/infrastructure/mongoose/aikido.user.model.js';
 import { AikidoUser } from '../domain/aikido.user.js';
 import AikidoUserMongoRepo from './aikido.users.mongo.repo.js';
@@ -58,6 +59,29 @@ describe('Given the AikidoUsersRepo', () => {
       (AikidoUserModel.find as jest.Mock).mockImplementation(mockPopulateExec);
       const result = await repo.query();
       expect(result).toEqual([{}]);
+    });
+  });
+
+  describe('When call the unpopulatedQueryById method', () => {
+    describe('And the id returns a user', () => {
+      test('Then it should return the user', async () => {
+        popValue = {};
+        (AikidoUserModel.findById as jest.Mock).mockReturnValueOnce({
+          exec: jest.fn().mockReturnValue(mockUnpopulatedAikidoUser),
+        });
+        const result = await repo.unpopulatedQueryById('1');
+        expect(result).toEqual(mockUnpopulatedAikidoUser);
+      });
+    });
+
+    describe('And the id not returns a user', () => {
+      test('Then it should throw error', async () => {
+        (AikidoUserModel.findById as jest.Mock).mockReturnValueOnce({
+          exec: jest.fn().mockReturnValue(undefined),
+        });
+        const result = repo.unpopulatedQueryById('1');
+        await expect(result).rejects.toThrow();
+      });
     });
   });
 

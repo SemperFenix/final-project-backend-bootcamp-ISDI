@@ -63,6 +63,29 @@ describe('Given the TechsRepo', () => {
     describe('And the id returns a user', () => {
       test('Then it should return the user', async () => {
         popTechValue = {};
+        (TechModel.findById as jest.Mock).mockReturnValueOnce({
+          exec: jest.fn().mockReturnValueOnce({}),
+        });
+        const result = await repo.unpopulatedQueryById('1');
+        expect(result).toEqual({});
+      });
+    });
+
+    describe('And the id not returns a user', () => {
+      test('Then it should throw error', async () => {
+        (TechModel.findById as jest.Mock).mockReturnValueOnce({
+          exec: jest.fn().mockReturnValueOnce(undefined),
+        });
+        const result = repo.unpopulatedQueryById('1');
+        await expect(result).rejects.toThrow();
+      });
+    });
+  });
+
+  describe('When call the queryById method', () => {
+    describe('And the id returns a user', () => {
+      test('Then it should return the user', async () => {
+        popTechValue = {};
         (TechModel.findById as jest.Mock).mockImplementation(mockTechPopulExec);
         const result = await repo.queryById('1');
         expect(result).toEqual({});

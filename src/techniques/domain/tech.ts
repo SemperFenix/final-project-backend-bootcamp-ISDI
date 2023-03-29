@@ -76,6 +76,18 @@ export class ProtoTech {
   }
 }
 
+export type PopulatedTech = {
+  id: string;
+  attack: Attack;
+  tech: Technique;
+  stand: Stand;
+  grade: Grades;
+  usersLearnt: AikidoUser[];
+  usersInProgress: AikidoUser[];
+  usersToLearn: AikidoUser[];
+  video?: string;
+};
+
 export class Tech extends ProtoTech {
   constructor(
     public id: string,

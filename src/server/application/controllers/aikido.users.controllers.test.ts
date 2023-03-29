@@ -306,11 +306,13 @@ describe('Given the AikidoUsersController class', () => {
   describe('When call the updateAdmin method', () => {
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
-        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
-          mockAikidoUser
-        );
+        (
+          mockAikidoUserRepo.unpopulatedQueryById as jest.Mock
+        ).mockResolvedValueOnce(mockAikidoUser);
         (mockAikidoUserRepo.update as jest.Mock).mockResolvedValueOnce({});
-        (mockTechRepo.queryById as jest.Mock).mockResolvedValueOnce(mockTech);
+        (mockTechRepo.unpopulatedQueryById as jest.Mock).mockResolvedValueOnce(
+          mockTech
+        );
         (mockTechRepo.update as jest.Mock).mockResolvedValueOnce({});
 
         await mockAikidoUsersController.updateAdmin(

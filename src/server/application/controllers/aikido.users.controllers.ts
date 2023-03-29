@@ -177,17 +177,23 @@ export class AikidoUsersController {
 
       if (!id) throw new HTTPError(400, 'Bad request', 'No user provided');
 
-      const userToUpdate = await this.aikidoUserQuerierId.execute(id);
+      const userToUpdate = await this.aikidoUserUnpopulatedQuerierId.execute(
+        id
+      );
 
       userToUpdate.techsLearnt.push(req.body.tech.id);
       userToUpdate.techsInProgress = userToUpdate.techsInProgress.filter(
-        (item) => item !== req.body.tech.id
+        (item) => item.toString() !== req.body.tech.id
       );
 
-      const tech = await this.techQuerierId.execute(req.body.tech.id);
+      const tech = await this.techUnpopulatedQuerierId.execute(
+        req.body.tech.id
+      );
 
       tech.usersLearnt.push(id);
-      tech.usersInProgress = tech.usersInProgress.filter((item) => item !== id);
+      tech.usersInProgress = tech.usersInProgress.filter(
+        (item) => item.toString() !== id
+      );
 
       await this.techUpdater.execute(tech);
 

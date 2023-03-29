@@ -9,6 +9,7 @@ import TechQuerierId from '../../../techniques/application/techs.querier.id.js';
 import TechQuerier from '../../../techniques/application/techs.querier.js';
 import TechSearcher from '../../../techniques/application/techs.searcher.js';
 import TechSearcherPaged from '../../../techniques/application/techs.searcher.paged.js';
+import TechUnpopulatedQuerierId from '../../../techniques/application/techs.unpopulated.querier.id.js';
 import TechUpdater from '../../../techniques/application/techs.updater.js';
 import { CustomRequest } from '../../infrastructure/middleware/interceptors.middleware.js';
 
@@ -19,6 +20,7 @@ export class TechsController {
   constructor(
     private techSearcher: TechSearcher,
     private techQuerier: TechQuerier,
+    private techUnpopulatedQuerierId: TechUnpopulatedQuerierId,
     private techQuerierId: TechQuerierId,
     private techCreator: TechCreator,
     private techUpdater: TechUpdater,

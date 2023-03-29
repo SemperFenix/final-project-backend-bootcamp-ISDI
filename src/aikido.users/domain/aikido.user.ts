@@ -38,6 +38,24 @@ export class ProtoAikidoUser {
   }
 }
 
+export type PopulatedAikidoUser = {
+  email: string;
+  password: string;
+  name: string;
+  lastName: string;
+  grade: Grades;
+  techsLearnt: Tech[];
+  techsInProgress: Tech[];
+  role: 'user' | 'sensei';
+  techToReview: string; // Esta propiedad está añadida por si me da tiempo a aumentar funcionalidades
+  id: string;
+  mainUke: AikidoUser;
+  avatar?: string;
+  age?: number;
+  timePracticing?: string;
+  principalSensei?: AikidoUser;
+};
+
 export class AikidoUser extends ProtoAikidoUser {
   constructor(
     public email: string,

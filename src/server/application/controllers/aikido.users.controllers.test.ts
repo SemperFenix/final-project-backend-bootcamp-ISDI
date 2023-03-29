@@ -19,6 +19,8 @@ import {
   mockTechRepo,
   mockTech,
   mockNoBodyReq,
+  mockUnpopulatedAikidoUser,
+  mockUnpopulatedTech,
 } from '../../../common/mocks/test.mocks.js';
 import { Auth } from '../../../services/auth.js';
 
@@ -30,17 +32,24 @@ jest.mock('../../../../src/config.js', () => ({
 
 jest.mock('../../../services/auth.js');
 const arrangeTechs = () => {
+  (mockAikidoUserRepo.unpopulatedQueryById as jest.Mock).mockResolvedValueOnce(
+    mockUnpopulatedAikidoUser
+  );
   (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
     mockAikidoUser
   );
   (mockTechRepo.queryById as jest.Mock).mockResolvedValueOnce(mockTech);
+  (mockTechRepo.unpopulatedQueryById as jest.Mock).mockResolvedValueOnce(
+    mockUnpopulatedTech
+  );
+
   (mockTechRepo.update as jest.Mock).mockResolvedValue(mockTech);
   (mockAikidoUserRepo.update as jest.Mock).mockResolvedValueOnce({});
 };
 
 describe('Given the AikidoUsersController class', () => {
-  afterEach(() => {
-    jest.clearAllMocks();
+  beforeEach(() => {
+    jest.resetAllMocks();
   });
 
   describe('When call the register method', () => {
@@ -98,7 +107,7 @@ describe('Given the AikidoUsersController class', () => {
         (mockAikidoUserRepo.search as jest.Mock).mockResolvedValueOnce([
           'Test',
         ]);
-        (Auth.createToken as jest.Mock).mockReturnValue('TestToken');
+        (Auth.createToken as jest.Mock).mockReturnValueOnce('TestToken');
 
         await mockAikidoUsersController.login(mockReq, mockRes, mockNext);
         expect(mockRes.json).toHaveBeenCalledWith({
@@ -556,6 +565,44 @@ describe('Given the AikidoUsersController class', () => {
   });
 
   describe('When call the removeTech method', () => {
+    describe('And there is no tech with that Id', () => {
+      test('Then it should call next(error)', async () => {
+        (
+          mockAikidoUserRepo.unpopulatedQueryById as jest.Mock
+        ).mockResolvedValueOnce(mockAikidoUser);
+
+        (mockTechRepo.unpopulatedQueryById as jest.Mock).mockResolvedValue(
+          undefined
+        );
+
+        const error = new HTTPError(404, 'Not found', 'Tech not found');
+
+        await mockAikidoUsersController.removeTech(
+          mockCustomReq,
+          mockRes,
+          mockNext
+        );
+        expect(mockNext).toHaveBeenCalledWith(error);
+      });
+    });
+
+    describe('And there is no user with that Id', () => {
+      test('Then it should call next(error)', async () => {
+        (
+          mockAikidoUserRepo.unpopulatedQueryById as jest.Mock
+        ).mockResolvedValueOnce(undefined);
+
+        const error = new HTTPError(404, 'Not found', 'User not found');
+
+        await mockAikidoUsersController.removeTech(
+          mockCustomReq,
+          mockRes,
+          mockNext
+        );
+        expect(mockNext).toHaveBeenCalledWith(error);
+      });
+    });
+
     describe('And all params are correct', () => {
       test('Then it should call res.json', async () => {
         arrangeTechs();
@@ -589,42 +636,6 @@ describe('Given the AikidoUsersController class', () => {
 
         await mockAikidoUsersController.removeTech(
           mockNoBodyReq,
-          mockRes,
-          mockNext
-        );
-        expect(mockNext).toHaveBeenCalledWith(error);
-      });
-    });
-
-    describe('And there is no user with that Id', () => {
-      test('Then it should call next(error)', async () => {
-        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
-          undefined
-        );
-
-        const error = new HTTPError(404, 'Not found', 'User not found');
-
-        await mockAikidoUsersController.removeTech(
-          mockCustomReq,
-          mockRes,
-          mockNext
-        );
-        expect(mockNext).toHaveBeenCalledWith(error);
-      });
-    });
-
-    describe('And there is no tech with that Id', () => {
-      test('Then it should call next(error)', async () => {
-        (mockAikidoUserRepo.queryById as jest.Mock).mockResolvedValueOnce(
-          mockAikidoUser
-        );
-
-        (mockTechRepo.queryById as jest.Mock).mockResolvedValue(undefined);
-
-        const error = new HTTPError(404, 'Not found', 'Tech not found');
-
-        await mockAikidoUsersController.removeTech(
-          mockCustomReq,
           mockRes,
           mockNext
         );

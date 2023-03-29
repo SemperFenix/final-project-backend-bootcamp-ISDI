@@ -21,6 +21,14 @@ export default class TechMongoRepo implements TechRepo {
     return techs;
   }
 
+  async unpopulatedQueryById(id: string): Promise<Tech> {
+    const tech = await TechModel.findById(id).exec();
+    if (!tech) throw new HTTPError(404, 'Not found', 'User Id not found in DB');
+    debug('Tech found!');
+
+    return tech;
+  }
+
   async queryById(id: string): Promise<Tech> {
     const tech = await TechModel.findById(id)
       .populate('usersLearnt')

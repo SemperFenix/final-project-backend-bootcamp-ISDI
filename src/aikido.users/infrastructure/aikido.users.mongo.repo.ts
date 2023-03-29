@@ -22,6 +22,16 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
     return aikidoUsers;
   }
 
+  async unpopulatedQueryById(id: string): Promise<AikidoUser> {
+    const unpopulatedUser = await AikidoUserModel.findById(id).exec();
+
+    if (!unpopulatedUser)
+      throw new HTTPError(404, 'Not found', 'User Id not found in DB');
+    debug('User found!');
+
+    return unpopulatedUser;
+  }
+
   async queryById(id: string): Promise<AikidoUser> {
     const aikidoUser = await AikidoUserModel.findById(id)
       .populate('techsLearnt')

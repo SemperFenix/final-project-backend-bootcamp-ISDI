@@ -99,7 +99,12 @@ export default class AikidoUserMongoRepo implements AikidoUserRepo {
       entity.id,
       entity,
       { new: true }
-    ).exec();
+    )
+      .populate('techsLearnt')
+      .populate('techsInProgress')
+      .populate('principalSensei')
+      .populate('mainUke')
+      .exec();
     if (!updatedAikidoUser)
       throw new HTTPError(
         404,
